@@ -1,11 +1,7 @@
 package resources;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.awt.Color;
@@ -14,113 +10,109 @@ import java.awt.Image;
 
 public class maingame extends JFrame implements ActionListener {
 
-    JLabel p1lives, p2lives, status, name1, name2, rockLabel1, paperLabel1, scissorsLabel1, paused, overlay;
+    JLabel p1lives, p2lives, status, name1, name2, rockLabel1, paperLabel1, scissorsLabel1, paused, overlay, background,
+            gameOver, nameplate, nameplate2;
     profile player = new profile();
     profile computer = new profile();
-    int defaultLife = 8;
-    JPanel pauseWindow;
+    JPanel bg;
     String winOrLose;
-    ImageIcon board;
+    ImageIcon board, namplates;
     Random randomChoice;
-    BufferedImage cardFire1;
     JButton rockButton, paperButton, scissorButton, retryButton, pauseButton, playButton, newGame;
     String[] choices = { "rock", "paper", "scissors" };
     String[] fireElements = { "Rock Fire", "Paper Fire", "Scissors Fire" };
     String[] waterElements = { "Rock Water", "Paper Water", "Scissors Water" };
     String[] natureElements = { "Rock Water", "Paper Water", "Scissors Water" };
-    String[] boards = { "boards\\board.png", "boards\\board2.png", "boards\\board2.2.png", "boards\\board2up.png",
-            "boards\\board3.png", "boards\\board5.png", "boards\\board3v2.png", "boards\\board4.png",
-            "boards\\board4v2.png" };
+    String[] boards = { "boards\\magam.png", "boards\\sky.png", "boards\\snad.png", "boards\\wood.png" };
+    String[] nameplates = { "nameplates\\magam.png", "nameplates\\sky.png", "nameplates\\snad.png",
+            "nameplates\\wood.png" };
     Random randomBg;
-    int randomIndex;
+    int randomIndex, computerCard;
     Image boardImage, boardResized;
 
     maingame() {
 
         randomBg = new Random();
-        randomIndex = randomBg.nextInt(8);
+        randomIndex = randomBg.nextInt(4);
 
         player.setName("Player 1");
         computer.setName("Computer");
 
-        board = new ImageIcon(boards[randomIndex]);
-        boardImage = board.getImage();
-        boardResized = boardImage.getScaledInstance(1535, 792, java.awt.Image.SCALE_SMOOTH);
-        board = new ImageIcon(boardResized);
-        this.setContentPane(new JLabel(board));
+        ImageIcon vignette = new ImageIcon("vignette 1080.png");
+        overlay = new JLabel();
+        overlay.setLocation(0, 0);
+        overlay.setIcon(vignette);
+        overlay.setSize(1920, 1080);
+        overlay.setVisible(false);
+        this.add(overlay);
 
         // SET THE CONFIGURATION OF PLAYER 1 NAME
         name1 = new JLabel();
         name1.setText(player.getName());
-        name1.setLocation(300, 100);
+        name1.setLocation(300, 80);
         name1.setSize(150, 30);
         name1.setFont(new Font("DePixel", Font.BOLD, 23));
         name1.setForeground(Color.WHITE);
         this.add(name1);
 
+        // ETO NAMAN YUNG SA LIVES NILA
+        p1lives = new JLabel();
+        p1lives.setText("Lives: " + player.getLives());
+        p1lives.setFont(new Font("DePixel", Font.BOLD, 18));
+        p1lives.setForeground(Color.white);
+        p1lives.setSize(150, 30);
+        p1lives.setLocation(325, 120);
+        this.add(p1lives);
+
+        p2lives = new JLabel();
+        p2lives.setText("Lives: " + computer.getLives());
+        p2lives.setForeground(Color.WHITE);
+        p2lives.setFont(new Font("DePixel", Font.BOLD, 18));
+        p2lives.setSize(150, 30);
+        p2lives.setLocation(1100, 120);
+        this.add(p2lives);
+
         // SET THE CONFIGURATION OF COMPUTER NAME
         name2 = new JLabel();
         name2.setText(computer.getName());
-        name2.setLocation(1075, 100);
+        name2.setLocation(1075, 80);
         name2.setForeground(Color.WHITE);
         name2.setSize(175, 30);
         name2.setFont(new Font("DePixel", Font.BOLD, 23));
         this.add(name2);
 
-        // ETO NAMAN YUNG SA LIVES NILA
-        p1lives = new JLabel();
-        p1lives.setText("Lives: " + player.getLives());
-        p1lives.setFont(new Font("DePixel", Font.BOLD, 23));
-        p1lives.setForeground(Color.white);
-        p1lives.setSize(150, 30);
-        p1lives.setLocation(40, 28);
-        this.add(p1lives);
+        // SET THE POSITIONS OF NAMEPLATE
+        nameplate = new JLabel();
+        nameplate.setSize(390, 120);
+        nameplate.setLocation(180, 50);
+        nameplate.setIcon(new ImageIcon(nameplates[randomIndex]));
+        this.add(nameplate);
 
-        // read file
-        ImageIcon cardFire = new ImageIcon(
-                "C:\\Users\\Fraion\\Documents\\ITE\\Java files\\Final project\\Fire Series\\Fire Paper (362x497).png");
-        JLabel fireCard = new JLabel(cardFire);
-        // fireCard.setSize(100, 100);
-        this.add(fireCard);
-
-        p2lives = new JLabel();
-        p2lives.setText("Lives: " + computer.getLives());
-        p2lives.setForeground(Color.WHITE);
-        p2lives.setFont(new Font("DePixel", Font.BOLD, 23));
-        p2lives.setSize(150, 30);
-        p2lives.setLocation(1390, 28);
-        this.add(p2lives);
-
-        // STATUS KUNG ANO YUNG PINILI NI COMPUTER AND KUNG SINO NANALO
-        status = new JLabel("Your Turn");
-        status.setForeground(Color.WHITE);
-        status.setFont(new Font("DePixel", Font.BOLD, 20));
-        status.setSize(300, 50);
-        this.add(status);
-
-        // GUMAWA NG JPANEL PARA PAGLALAGYAN NG STATUS AND PARA MA-ALIGN SA CENTER
-        JPanel placeholder = new JPanel();
-        placeholder.setSize(1550, 30);
-        placeholder.setLocation(0, 750);
-        placeholder.setOpaque(false);
-        placeholder.add(status);
-        this.add(placeholder);
+        // SET THE POSITIONS OF NAMEPLATE
+        nameplate2 = new JLabel();
+        nameplate2.setSize(390, 120);
+        nameplate2.setLocation(965, 50);
+        nameplate2.setIcon(new ImageIcon(nameplates[randomIndex]));
+        this.add(nameplate2);
 
         // RETRY BUTTON
+        ImageIcon newGameIcon = new ImageIcon(
+                "Buttons\\try (w_color).png");
         retryButton = new JButton();
-        retryButton.setText("Retry");
+        retryButton.setIcon(newGameIcon);
         retryButton.setEnabled(false);
-        retryButton.setSize(75, 25);
+        retryButton.setSize(32, 32);
         retryButton.setLocation(750, 500);
         retryButton.setVisible(false);
         retryButton.addActionListener(e -> retry(e));
+        retryButton.addActionListener(this);
         retryButton.addActionListener(e -> computer.setLives(8));
         retryButton.addActionListener(e -> player.setLives(8));
         this.add(retryButton);
 
         // PAUSE BUTTON
         ImageIcon pauseIcon = new ImageIcon(
-                "Buttons\\pause.png");
+                "Buttons\\pause (w_color).png");
         pauseButton = new JButton();
         pauseButton.setSize(32, 32);
         pauseButton.setIcon(pauseIcon);
@@ -140,8 +132,6 @@ public class maingame extends JFrame implements ActionListener {
         this.add(paused);
 
         // NEW GAME BUTTON
-        ImageIcon newGameIcon = new ImageIcon(
-                "Buttons\\try (w_color).png");
         newGame = new JButton(newGameIcon);
         newGame.setSize(32, 32);
         newGame.setLocation(700, 500);
@@ -150,6 +140,7 @@ public class maingame extends JFrame implements ActionListener {
         newGame.setFocusPainted(false);
         newGame.setContentAreaFilled(false);
         newGame.setFocusable(false);
+        newGame.addActionListener(this);
         newGame.addActionListener(e -> tryAgain());
         this.add(newGame);
 
@@ -167,89 +158,100 @@ public class maingame extends JFrame implements ActionListener {
         playButton.addActionListener(e -> playMethod());
         this.add(playButton);
 
-        ImageIcon vignette = new ImageIcon("vignette 1080.png");
-        Image vignetteImage = vignette.getImage();
-        Image vignetteResized = vignetteImage.getScaledInstance(1535, 1065, java.awt.Image.SCALE_SMOOTH);
-
-        overlay = new JLabel();
-        overlay.setLocation(0, 0);
-        overlay.setIcon(new ImageIcon(vignetteResized));
-        // overlay.setBackground(Color.BLUE);
-        overlay.setSize(1920, 1080);
-        overlay.setVisible(false);
-        this.add(overlay);
+        gameOver = new JLabel();
+        gameOver.setVisible(false);
+        if (player.getLives() == 0) {
+            gameOver.setText("You Lost!");
+        } else {
+            gameOver.setText("You won!");
+        }
+        this.add(gameOver);
 
         // COMFIGURATIONS NG ROCK PAPER AND SCISSORS
-        ImageIcon rockIcon = new ImageIcon("rock\\pixil-frame-0 (2).png");
-        Image rockImage = rockIcon.getImage();
-        Image rockResized = rockImage.getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH);
-        rockIcon = new ImageIcon(rockResized);
+        ImageIcon rockIcon = new ImageIcon("Default RPS\\Default Rock (266x365).png");
         rockButton = new JButton();
-        rockButton.setSize(80, 80);
-        rockButton.setLocation(350, 300);
+        rockButton.setSize(266, 365);
+        rockButton.setLocation(90, 280);
         rockButton.setIcon(rockIcon);
         rockButton.setBorderPainted(false);
         rockButton.setFocusPainted(false);
         rockButton.setContentAreaFilled(false);
-        rockButton.addActionListener(this);
+        rockButton.addActionListener(e -> buttonPressed());
         rockButton.addActionListener(e -> player.setChoice(1));
         this.add(rockButton);
 
-        ImageIcon paperIcon = new ImageIcon("paper\\Paper Default (2).png");
-        Image paperImage = paperIcon.getImage();
-        Image paperResized = paperImage.getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH);
-        paperIcon = new ImageIcon(paperResized);
+        ImageIcon paperIcon = new ImageIcon("Default RPS\\Default Paper (266x365).png");
         paperButton = new JButton();
-        paperButton.setSize(80, 80);
-        paperButton.setLocation(350, 400);
+        paperButton.setSize(266, 365);
+        paperButton.setLocation(350, 280);
         paperButton.setIcon(paperIcon);
         paperButton.setBorderPainted(false);
         paperButton.setFocusPainted(false);
         paperButton.setContentAreaFilled(false);
-        paperButton.addActionListener(this);
+        paperButton.addActionListener(e -> buttonPressed());
         paperButton.addActionListener(e -> player.setChoice(2));
         this.add(paperButton);
 
-        ImageIcon scissorIcon = new ImageIcon("scissors\\Scissors Default.png");
-        Image scissorImage = scissorIcon.getImage();
-        Image scissorResized = scissorImage.getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH);
-        scissorIcon = new ImageIcon(scissorResized);
+        ImageIcon scissorIcon = new ImageIcon("Default RPS\\Default Scissor (266x365).png");
         scissorButton = new JButton();
-        scissorButton.setSize(80, 80);
-        scissorButton.setLocation(350, 500);
+        scissorButton.setSize(266, 365);
+        scissorButton.setLocation(610, 280);
         scissorButton.setIcon(scissorIcon);
         scissorButton.setBorderPainted(false);
         scissorButton.setFocusPainted(false);
         scissorButton.setContentAreaFilled(false);
-        scissorButton.addActionListener(this);
+        scissorButton.addActionListener(e -> buttonPressed());
         scissorButton.addActionListener(e -> player.setChoice(3));
         this.add(scissorButton);
 
         // LABELS OF ROCK PAPER SCISORS BUT AS IMAGES
+
         rockLabel1 = new JLabel();
-        rockLabel1.setIcon(new ImageIcon(rockResized));
-        rockLabel1.setSize(75, 75);
-        rockLabel1.setLocation(1075, 300);
+        rockLabel1.setIcon(new ImageIcon("Default RPS\\Default Rock (266x365).png"));
+        rockLabel1.setSize(266, 365);
+        rockLabel1.setLocation(1000, 280);
+        rockLabel1.setVisible(false);
         this.add(rockLabel1);
 
         paperLabel1 = new JLabel();
-        paperLabel1.setIcon(new ImageIcon(paperResized));
-        paperLabel1.setSize(75, 75);
-        paperLabel1.setLocation(1075, 400);
+        paperLabel1.setIcon(new ImageIcon("Default RPS\\Default Paper (266x365).png"));
+        paperLabel1.setSize(266, 365);
+        paperLabel1.setLocation(1000, 280);
+        paperLabel1.setVisible(false);
         this.add(paperLabel1);
 
         scissorsLabel1 = new JLabel();
-        scissorsLabel1.setIcon(new ImageIcon(scissorResized));
-        scissorsLabel1.setSize(75, 75);
-        scissorsLabel1.setLocation(1075, 500);
+        scissorsLabel1.setIcon(new ImageIcon("Default RPS\\Default Scissor (266x365).png"));
+        scissorsLabel1.setSize(266, 365);
+        scissorsLabel1.setLocation(1000, 280);
+        scissorsLabel1.setVisible(false);
         this.add(scissorsLabel1);
 
         // Configurations ng Elements HUHUHUHUHUHUHUHUHUHUHUHUHUHUHUHUHUH
-        JLabel rockFire = new JLabel();
-        ImageIcon rockElement1 = new ImageIcon("Rock Fire.png");
-        rockFire.setIcon(rockElement1);
-        rockFire.setSize(50, 50);
-        // this.add(rockFire);
+
+        JLabel rockCard = new JLabel();
+        ImageIcon rockIconn = new ImageIcon("Default RPS\\Default Rock (362x497).png");
+        rockCard.setIcon(rockIconn);
+        rockCard.setSize(362, 497);
+        // this.add(rockCard);
+
+        board = new ImageIcon(boards[randomIndex]);
+        boardImage = board.getImage();
+        boardResized = boardImage.getScaledInstance(1535, 792, java.awt.Image.SCALE_SMOOTH);
+        board = new ImageIcon(boardResized);
+
+        // ISET NATIN YUNG SA BACKGROUND NAMAN
+        background = new JLabel();
+        background.setIcon(board);
+        background.setLocation(0, -143);
+        background.setSize(1920, 1080);
+
+        bg = new JPanel();
+        bg.setSize(1920, 1080);
+        bg.setLocation(0, 0);
+        bg.add(background);
+        bg.setLayout(null);
+        this.add(bg);
 
         // CONFIGURATION NG GUI
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -263,17 +265,37 @@ public class maingame extends JFrame implements ActionListener {
         this.setIconImage(icon.getImage());
     }
 
+    // CHANGES THE BACKGROUND ALONG WITH THE NAMEPLATE
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        randomBg = new Random();
+        randomIndex = randomBg.nextInt(4);
+        nameplate.setIcon(new ImageIcon(nameplates[randomIndex]));
+        nameplate2.setIcon(new ImageIcon(nameplates[randomIndex]));
+        board = new ImageIcon(boards[randomIndex]);
+        boardImage = board.getImage();
+        boardResized = boardImage.getScaledInstance(1535, 792, java.awt.Image.SCALE_SMOOTH);
+        board = new ImageIcon(boardResized);
+
+        background.setIcon(board);
+
+    }
+
+    // TRY AGAIN OR NEW GAME
     public void tryAgain() {
         playMethod();
         player.setName("Player 1");
         computer.setName("Computer");
-        status.setText("Your turn");
         player.setLives(8);
         computer.setLives(8);
+        rockLabel1.setVisible(false);
+        paperLabel1.setVisible(false);
+        scissorsLabel1.setVisible(false);
         p1lives.setText("Lives: " + Integer.toString(player.getLives()));
         p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
     }
 
+    // ISET NATIN YUNG SA PAUSE METHOD
     public void pauseMethod() {
         rockButton.setVisible(false);
         paperButton.setVisible(false);
@@ -282,7 +304,6 @@ public class maingame extends JFrame implements ActionListener {
         rockLabel1.setVisible(false);
         paperLabel1.setVisible(false);
         scissorsLabel1.setVisible(false);
-        status.setVisible(false);
         paused.setVisible(true);
         p1lives.setVisible(false);
         p2lives.setVisible(false);
@@ -294,6 +315,7 @@ public class maingame extends JFrame implements ActionListener {
         playButton.setVisible(true);
     }
 
+    // ETO NAMAN YUNG SA PLAY
     public void playMethod() {
         overlay.setVisible(false);
         rockButton.setVisible(true);
@@ -301,10 +323,6 @@ public class maingame extends JFrame implements ActionListener {
         scissorButton.setVisible(true);
         pauseButton.setVisible(true);
         newGame.setVisible(false);
-        rockLabel1.setVisible(true);
-        paperLabel1.setVisible(true);
-        scissorsLabel1.setVisible(true);
-        status.setVisible(true);
         paused.setVisible(false);
         p1lives.setVisible(true);
         p2lives.setVisible(true);
@@ -312,24 +330,36 @@ public class maingame extends JFrame implements ActionListener {
         name2.setVisible(true);
         pauseButton.setVisible(true);
         playButton.setVisible(false);
+        if (computerCard == 1) {
+            rockLabel1.setVisible(true);
+            paperLabel1.setVisible(false);
+            scissorsLabel1.setVisible(false);
+        } else if (computerCard == 2) {
+            rockLabel1.setVisible(false);
+            paperLabel1.setVisible(true);
+            scissorsLabel1.setVisible(false);
+        } else if (computerCard == 3) {
+            rockLabel1.setVisible(false);
+            paperLabel1.setVisible(false);
+            scissorsLabel1.setVisible(true);
+        } else {
+            rockLabel1.setVisible(false);
+            paperLabel1.setVisible(false);
+            scissorsLabel1.setVisible(false);
+        }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void buttonPressed() {
         if (player.getLives() == 1) {
-            status.setText("You Lost!");
-            rockButton.setEnabled(false);
-            paperButton.setEnabled(false);
-            scissorButton.setEnabled(false);
-            retryButton.setEnabled(true);
-            retryButton.setVisible(true);
+            int livesp1 = player.getLives() - 1;
+            player.setLives(livesp1);
+            p1lives.setText("Lives: " + Integer.toString(player.getLives()));
+            gameIsOver();
         } else if (computer.getLives() == 1) {
-            status.setText("You Won!");
-            rockButton.setEnabled(false);
-            paperButton.setEnabled(false);
-            scissorButton.setEnabled(false);
-            retryButton.setEnabled(true);
-            retryButton.setVisible(true);
+            int livesp2 = computer.getLives() - 1;
+            computer.setLives(livesp2);
+            p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
+            gameIsOver();
         } else {
             randomElement();
             proceed();
@@ -343,32 +373,39 @@ public class maingame extends JFrame implements ActionListener {
         paperButton.setEnabled(true);
         scissorButton.setEnabled(true);
         retryButton.setEnabled(false);
+        overlay.setVisible(false);
         retryButton.setVisible(false);
         computer.setLives(8);
         player.setLives(8);
         p1lives.setText("Lives: " + Integer.toString(player.getLives()));
         p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
-        status.setText("Your Turn");
 
+    }
+
+    public void gameIsOver() {
+        overlay.setVisible(true);
+        rockButton.setEnabled(false);
+        paperButton.setEnabled(false);
+        scissorButton.setEnabled(false);
+        retryButton.setEnabled(true);
+        retryButton.setVisible(true);
     }
 
     public void proceed() {
         randomChoice = new Random();
         int computerChoice = randomChoice.nextInt(3) + 1;
+        computerCard = computerChoice;
 
         try {
             TimeUnit.SECONDS.sleep(1);
             if (player.getChoice() == computerChoice) {
-                winOrLose = "Tie";
             } else if ((player.getChoice() == 1 && computerChoice == 3) ||
                     (player.getChoice() == 2 && computerChoice == 1) ||
                     (player.getChoice() == 3 && computerChoice == 2)) {
-                winOrLose = "You Won";
                 int livesp2 = computer.getLives() - 1;
                 computer.setLives(livesp2);
                 p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
             } else {
-                winOrLose = "You Lost";
                 int livesp1 = player.getLives() - 1;
                 player.setLives(livesp1);
                 p1lives.setText("Lives: " + Integer.toString(player.getLives()));
@@ -378,11 +415,17 @@ public class maingame extends JFrame implements ActionListener {
         }
 
         if (computerChoice == 1) {
-            status.setText(winOrLose + ". " + computer.getName() + " choosed Rock");
+            rockLabel1.setVisible(true);
+            paperLabel1.setVisible(false);
+            scissorsLabel1.setVisible(false);
         } else if (computerChoice == 2) {
-            status.setText(winOrLose + ". " + computer.getName() + " choosed Paper");
+            rockLabel1.setVisible(false);
+            paperLabel1.setVisible(true);
+            scissorsLabel1.setVisible(false);
         } else if (computerChoice == 3) {
-            status.setText(winOrLose + ". " + computer.getName() + " choosed Scissors");
+            rockLabel1.setVisible(false);
+            paperLabel1.setVisible(false);
+            scissorsLabel1.setVisible(true);
         }
 
     }
