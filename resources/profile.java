@@ -5,6 +5,7 @@ public class profile {
     private String name;
     private int lives = 8;
     private int defaultChoice;
+    private String element;
 
     void setName(String p1Name) {
         this.name = p1Name;
@@ -12,6 +13,14 @@ public class profile {
 
     void setChoice(int defaultChoice) {
         this.defaultChoice = defaultChoice;
+    }
+
+    void setElement(String element) {
+        this.element = element;
+    }
+
+    String getElement() {
+        return element;
     }
 
     String getName() {

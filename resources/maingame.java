@@ -3,14 +3,13 @@ package resources;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 
 public class maingame extends JFrame implements ActionListener {
 
-    JLabel p1lives, p2lives, status, name1, name2, rockLabel1, paperLabel1, scissorsLabel1, paused, overlay, background,
+    JLabel p1lives, p2lives, name1, name2, rockLabel1, paperLabel1, scissorsLabel1, paused, overlay, background,
             gameOver, nameplate, nameplate2;
     profile player = new profile();
     profile computer = new profile();
@@ -20,9 +19,6 @@ public class maingame extends JFrame implements ActionListener {
     Random randomChoice;
     JButton rockButton, paperButton, scissorButton, retryButton, pauseButton, playButton, newGame;
     String[] choices = { "rock", "paper", "scissors" };
-    String[] fireElements = { "Rock Fire", "Paper Fire", "Scissors Fire" };
-    String[] waterElements = { "Rock Water", "Paper Water", "Scissors Water" };
-    String[] natureElements = { "Rock Water", "Paper Water", "Scissors Water" };
     String[] boards = { "boards\\magam.png", "boards\\sky.png", "boards\\snad.png", "boards\\wood.png" };
     String[] nameplates = { "nameplates\\magam.png", "nameplates\\sky.png", "nameplates\\snad.png",
             "nameplates\\wood.png" };
@@ -85,14 +81,14 @@ public class maingame extends JFrame implements ActionListener {
         nameplate = new JLabel();
         nameplate.setSize(390, 120);
         nameplate.setLocation(180, 50);
-        nameplate.setIcon(new ImageIcon(nameplates[randomIndex]));
+        nameplate.setIcon(new ImageIcon(nameplates[3]));
         this.add(nameplate);
 
         // SET THE POSITIONS OF NAMEPLATE
         nameplate2 = new JLabel();
         nameplate2.setSize(390, 120);
         nameplate2.setLocation(965, 50);
-        nameplate2.setIcon(new ImageIcon(nameplates[randomIndex]));
+        nameplate2.setIcon(new ImageIcon(nameplates[3]));
         this.add(nameplate2);
 
         // RETRY BUTTON
@@ -171,11 +167,8 @@ public class maingame extends JFrame implements ActionListener {
         ImageIcon rockIcon = new ImageIcon("Default RPS\\Default Rock (266x365).png");
         rockButton = new JButton();
         rockButton.setSize(266, 365);
-        rockButton.setLocation(90, 280);
+        rockButton.setLocation(80, 280);
         rockButton.setIcon(rockIcon);
-        rockButton.setBorderPainted(false);
-        rockButton.setFocusPainted(false);
-        rockButton.setContentAreaFilled(false);
         rockButton.addActionListener(e -> buttonPressed());
         rockButton.addActionListener(e -> player.setChoice(1));
         this.add(rockButton);
@@ -185,9 +178,6 @@ public class maingame extends JFrame implements ActionListener {
         paperButton.setSize(266, 365);
         paperButton.setLocation(350, 280);
         paperButton.setIcon(paperIcon);
-        paperButton.setBorderPainted(false);
-        paperButton.setFocusPainted(false);
-        paperButton.setContentAreaFilled(false);
         paperButton.addActionListener(e -> buttonPressed());
         paperButton.addActionListener(e -> player.setChoice(2));
         this.add(paperButton);
@@ -195,11 +185,8 @@ public class maingame extends JFrame implements ActionListener {
         ImageIcon scissorIcon = new ImageIcon("Default RPS\\Default Scissor (266x365).png");
         scissorButton = new JButton();
         scissorButton.setSize(266, 365);
-        scissorButton.setLocation(610, 280);
+        scissorButton.setLocation(620, 280);
         scissorButton.setIcon(scissorIcon);
-        scissorButton.setBorderPainted(false);
-        scissorButton.setFocusPainted(false);
-        scissorButton.setContentAreaFilled(false);
         scissorButton.addActionListener(e -> buttonPressed());
         scissorButton.addActionListener(e -> player.setChoice(3));
         this.add(scissorButton);
@@ -229,13 +216,8 @@ public class maingame extends JFrame implements ActionListener {
 
         // Configurations ng Elements HUHUHUHUHUHUHUHUHUHUHUHUHUHUHUHUHUH
 
-        JLabel rockCard = new JLabel();
-        ImageIcon rockIconn = new ImageIcon("Default RPS\\Default Rock (362x497).png");
-        rockCard.setIcon(rockIconn);
-        rockCard.setSize(362, 497);
-        // this.add(rockCard);
-
-        board = new ImageIcon(boards[randomIndex]);
+        // board = new ImageIcon(boards[randomIndex]);
+        board = new ImageIcon(boards[3]);
         boardImage = board.getImage();
         boardResized = boardImage.getScaledInstance(1535, 792, java.awt.Image.SCALE_SMOOTH);
         board = new ImageIcon(boardResized);
@@ -270,9 +252,9 @@ public class maingame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         randomBg = new Random();
         randomIndex = randomBg.nextInt(4);
-        nameplate.setIcon(new ImageIcon(nameplates[randomIndex]));
-        nameplate2.setIcon(new ImageIcon(nameplates[randomIndex]));
-        board = new ImageIcon(boards[randomIndex]);
+        nameplate.setIcon(new ImageIcon(nameplates[3]));
+        nameplate2.setIcon(new ImageIcon(nameplates[3]));
+        board = new ImageIcon(boards[3]);
         boardImage = board.getImage();
         boardResized = boardImage.getScaledInstance(1535, 792, java.awt.Image.SCALE_SMOOTH);
         board = new ImageIcon(boardResized);
@@ -361,7 +343,6 @@ public class maingame extends JFrame implements ActionListener {
             p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
             gameIsOver();
         } else {
-            randomElement();
             proceed();
         }
     }
@@ -397,7 +378,7 @@ public class maingame extends JFrame implements ActionListener {
         computerCard = computerChoice;
 
         try {
-            TimeUnit.SECONDS.sleep(1);
+            Thread.sleep(500);
             if (player.getChoice() == computerChoice) {
             } else if ((player.getChoice() == 1 && computerChoice == 3) ||
                     (player.getChoice() == 2 && computerChoice == 1) ||
@@ -430,16 +411,9 @@ public class maingame extends JFrame implements ActionListener {
 
     }
 
-    void randomElement() {
-
-        // int elements = randomChoice.nextInt(3);
-        // System.out.println(elements);
-
-    }
-
     public static void main(String[] args) {
 
-        maingame mainGame = new maingame();
+        maingame mainnGame = new maingame();
 
     }
 }
