@@ -473,6 +473,7 @@ public class maingame extends JFrame implements ActionListener {
         randomChoice = new Random();
         int randomElement = randomChoice.nextInt(3);
         p1Element = (elements[randomElement]);
+        System.out.println(p1Element);
 
         // INFUSAL OF ELEMENTS FOR PLAYER
         if (p1Choice.equals("rock")) {
