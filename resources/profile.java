@@ -3,15 +3,15 @@ package resources;
 public class profile {
 
     private String name;
-    private int lives = 8;
-    private int defaultChoice;
+    private int lives = 10;
+    private String defaultChoice;
     private String element;
 
     void setName(String p1Name) {
         this.name = p1Name;
     }
 
-    void setChoice(int defaultChoice) {
+    void setChoice(String defaultChoice) {
         this.defaultChoice = defaultChoice;
     }
 
@@ -35,7 +35,7 @@ public class profile {
         this.lives = lives;
     }
 
-    int getChoice() {
+    String getChoice() {
         return defaultChoice;
     }
 
