@@ -1,3 +1,5 @@
+package withOOP;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Random;
@@ -7,13 +9,10 @@ import java.awt.Image;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class maingame extends JFrame implements ActionListener {
+public class game extends JFrame implements ActionListener {
 
-    Runnable turnBack;
-    JLabel p1lives, p2lives, status, name1, name2, rockLabel1, paperLabel1, scissorsLabel1, paused, overlay, background,
-            gameOver, nameplate, nameplate2;
-    JLabel rockFire, rockWater, rockNature, paperFire, paperWater, paperNature, scissorsFire, scissorsWater,
-            scissorsNature, round;
+    JLabel p1lives, p2lives, status, name1, name2, paused, overlay, background,
+            gameOver, nameplate, nameplate2, round, sampleLog, unknownCard;
     JPanel bg;
     ImageIcon board, namplates;
     Random randomChoice;
@@ -24,20 +23,19 @@ public class maingame extends JFrame implements ActionListener {
     String[] nameplates = { "nameplates\\magam.png", "nameplates\\sky.png", "nameplates\\snad.png",
             "nameplates\\wood.png" };
     Random randomBg;
-    int randomIndex, computerCard, roundNo, p1Lives, p2Lives;
+    int randomIndex, computerCard, roundNo;
     Image boardImage, boardResized;
-    String p1Choice, computerObj, p1Element, computerElement;
+    players player1 = new players();
+    players computer = new players();
 
-    maingame() {
+    game() {
         roundNo = 1;
 
         randomBg = new Random();
         randomIndex = randomBg.nextInt(4);
 
-        String player1 = "Player 1";
-        String computer = "Computer";
-        p1Lives = 10;
-        p2Lives = 10;
+        player1.setName("Player 1");
+        computer.setName("Computer");
 
         ImageIcon vignette = new ImageIcon("vignette 1080.png");
         overlay = new JLabel();
@@ -49,7 +47,7 @@ public class maingame extends JFrame implements ActionListener {
 
         // SET THE CONFIGURATION OF PLAYER 1 NAME
         name1 = new JLabel();
-        name1.setText(player1);
+        name1.setText(player1.getName());
         name1.setLocation(300, 80);
         name1.setSize(150, 30);
         name1.setFont(new Font("DePixel", Font.BOLD, 23));
@@ -58,7 +56,7 @@ public class maingame extends JFrame implements ActionListener {
 
         // ETO NAMAN YUNG SA LIVES NILA
         p1lives = new JLabel();
-        p1lives.setText("Lives: " + p1Lives);
+        p1lives.setText("Lives: " + player1.getLives());
         p1lives.setFont(new Font("DePixel", Font.BOLD, 18));
         p1lives.setForeground(Color.white);
         p1lives.setSize(150, 30);
@@ -66,16 +64,16 @@ public class maingame extends JFrame implements ActionListener {
         this.add(p1lives);
 
         p2lives = new JLabel();
-        p2lives.setText("Lives: " + p2Lives);
+        p2lives.setText("Lives: " + computer.getLives());
         p2lives.setForeground(Color.WHITE);
         p2lives.setFont(new Font("DePixel", Font.BOLD, 18));
         p2lives.setSize(150, 30);
         p2lives.setLocation(1100, 120);
         this.add(p2lives);
 
-        // SET THE CONFIGURATION OF computer NAME
+        // SET THE CONFIGURATION OF COMPUTER NAME
         name2 = new JLabel();
-        name2.setText(computer);
+        name2.setText(computer.getName());
         name2.setLocation(1075, 80);
         name2.setForeground(Color.WHITE);
         name2.setSize(175, 30);
@@ -114,8 +112,8 @@ public class maingame extends JFrame implements ActionListener {
         retryButton.setVisible(false);
         retryButton.addActionListener(e -> retry(e));
         retryButton.addActionListener(this);
-        retryButton.addActionListener(e -> p1Lives = 10);
-        retryButton.addActionListener(e -> p2Lives = 10);
+        retryButton.addActionListener(e -> player1.setLives(10));
+        retryButton.addActionListener(e -> computer.setLives(10));
         this.add(retryButton);
 
         // PAUSE BUTTON
@@ -178,7 +176,7 @@ public class maingame extends JFrame implements ActionListener {
         rockButton.setLocation(90, 280);
         rockButton.setIcon(new ImageIcon("Default RPS\\Default Rock (266x365).png"));
         rockButton.addActionListener(e -> buttonPressed());
-        rockButton.addActionListener(e -> p1Choice = "rock");
+        rockButton.addActionListener(e -> player1.setChoice("rock"));
         this.add(rockButton);
 
         paperButton = new JButton();
@@ -186,7 +184,7 @@ public class maingame extends JFrame implements ActionListener {
         paperButton.setLocation(350, 280);
         paperButton.setIcon(new ImageIcon("Default RPS\\Default Paper (266x365).png"));
         paperButton.addActionListener(e -> buttonPressed());
-        paperButton.addActionListener(e -> p1Choice = "paper");
+        paperButton.addActionListener(e -> player1.setChoice("paper"));
         this.add(paperButton);
 
         scissorButton = new JButton();
@@ -194,30 +192,15 @@ public class maingame extends JFrame implements ActionListener {
         scissorButton.setLocation(610, 280);
         scissorButton.setIcon(new ImageIcon("Default RPS\\Default Scissor (266x365).png"));
         scissorButton.addActionListener(e -> buttonPressed());
-        scissorButton.addActionListener(e -> p1Choice = "scissors");
+        scissorButton.addActionListener(e -> player1.setChoice("scissors"));
         this.add(scissorButton);
 
-        // LABELS OF ROCK PAPER SCISORS BUT AS IMAGES FOR computer SIDE
-        rockLabel1 = new JLabel();
-        rockLabel1.setIcon(new ImageIcon("Default RPS\\Default Rock (266x365).png"));
-        rockLabel1.setSize(266, 365);
-        rockLabel1.setLocation(1000, 280);
-        rockLabel1.setVisible(false);
-        this.add(rockLabel1);
-
-        paperLabel1 = new JLabel();
-        paperLabel1.setIcon(new ImageIcon("Default RPS\\Default Paper (266x365).png"));
-        paperLabel1.setSize(266, 365);
-        paperLabel1.setLocation(1000, 280);
-        paperLabel1.setVisible(false);
-        this.add(paperLabel1);
-
-        scissorsLabel1 = new JLabel();
-        scissorsLabel1.setIcon(new ImageIcon("Default RPS\\Default Scissor (266x365).png"));
-        scissorsLabel1.setSize(266, 365);
-        scissorsLabel1.setLocation(1000, 280);
-        scissorsLabel1.setVisible(false);
-        this.add(scissorsLabel1);
+        // LABELS OF ROCK PAPER SCISORS BUT AS IMAGES FOR COMPUTER SIDE
+        unknownCard = new JLabel();
+        unknownCard.setIcon(new ImageIcon("Default RPS\\unknown  266x365.png"));
+        unknownCard.setSize(266, 365);
+        unknownCard.setLocation(1000, 280);
+        this.add(unknownCard);
 
         // SET THE BACKGROUND OF THE BOARD
         board = new ImageIcon(boards[randomIndex]);
@@ -270,12 +253,13 @@ public class maingame extends JFrame implements ActionListener {
     // TRY AGAIN OR NEW GAME NA NAKALAGAY SA MAY PAUSE WINDOW
     public void tryAgain() {
         playMethod();
+        unknownCard.setVisible(true);
+        unknownCard.setIcon(new ImageIcon("Default RPS\\unknown 227x311.png"));
         pauseButton.setVisible(true);
-        p1Lives = 10;
-        p2Lives = 10;
-        rockLabel1.setVisible(false);
-        paperLabel1.setVisible(false);
-        scissorsLabel1.setVisible(false);
+        p1lives.setForeground(Color.white);
+        p2lives.setForeground(Color.white);
+        player1.setLives(10);
+        computer.setLives(10);
         rockButton.setVisible(true);
         paperButton.setVisible(true);
         scissorButton.setVisible(true);
@@ -285,8 +269,9 @@ public class maingame extends JFrame implements ActionListener {
         gameOver.setVisible(false);
         roundNo = 1;
         round.setText("Round No: " + roundNo);
-        p1lives.setText("Lives: " + Integer.toString(p1Lives));
-        p2lives.setText("Lives: " + Integer.toString(p2Lives));
+        p1lives.setText("Lives: " + Integer.toString(player1.getLives()));
+        p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
+        ;
     }
 
     // ISET NATIN YUNG SA PAUSE METHOD
@@ -295,9 +280,7 @@ public class maingame extends JFrame implements ActionListener {
         paperButton.setVisible(false);
         scissorButton.setVisible(false);
         pauseButton.setVisible(true);
-        rockLabel1.setVisible(false);
-        paperLabel1.setVisible(false);
-        scissorsLabel1.setVisible(false);
+        unknownCard.setVisible(false);
         paused.setVisible(true);
         p1lives.setVisible(false);
         p2lives.setVisible(false);
@@ -313,6 +296,7 @@ public class maingame extends JFrame implements ActionListener {
     // ETO NAMAN YUNG SA PLAY
     public void playMethod() {
         overlay.setVisible(false);
+        unknownCard.setVisible(true);
         rockButton.setVisible(true);
         paperButton.setVisible(true);
         scissorButton.setVisible(true);
@@ -326,31 +310,15 @@ public class maingame extends JFrame implements ActionListener {
         pauseButton.setVisible(true);
         playButton.setVisible(false);
         round.setVisible(true);
-        if (computerCard == 0) {
-            rockLabel1.setVisible(true);
-            paperLabel1.setVisible(false);
-            scissorsLabel1.setVisible(false);
-        } else if (computerCard == 1) {
-            rockLabel1.setVisible(false);
-            paperLabel1.setVisible(true);
-            scissorsLabel1.setVisible(false);
-        } else if (computerCard == 2) {
-            rockLabel1.setVisible(false);
-            paperLabel1.setVisible(false);
-            scissorsLabel1.setVisible(true);
-        } else {
-            rockLabel1.setVisible(false);
-            paperLabel1.setVisible(false);
-            scissorsLabel1.setVisible(false);
-        }
     }
 
     public void buttonPressed() {
-        if (p1Lives <= 0) {
+        if (player1.getLives() <= 0) {
             gameOver.setText("Game over!");
             p1lives.setText("Lives: 0");
+
             gameIsOver();
-        } else if (p2Lives <= 0) {
+        } else if (computer.getLives() <= 0) {
             p2lives.setText("Lives: 0");
             gameOver.setText("You won");
             gameIsOver();
@@ -364,23 +332,27 @@ public class maingame extends JFrame implements ActionListener {
     public void retry(ActionEvent e) {
         roundNo = 1;
         round.setText("Round No: " + roundNo);
-        p1Lives = 10;
-        p2Lives = 10;
+        player1.setLives(10);
+        computer.setLives(10);
         rockButton.setVisible(true);
         paperButton.setVisible(true);
         scissorButton.setVisible(true);
         retryButton.setVisible(false);
         overlay.setVisible(false);
         gameOver.setVisible(false);
+        unknownCard.setIcon(new ImageIcon("Default RPS\\unknown  266x365.png"));
         rockButton.setIcon(new ImageIcon("Default RPS\\Default Rock (266x365).png"));
         paperButton.setIcon(new ImageIcon("Default RPS\\Default Paper (266x365).png"));
         scissorButton.setIcon(new ImageIcon("Default RPS\\Default Scissor (266x365).png"));
         rockButton.setEnabled(true);
         paperButton.setEnabled(true);
         scissorButton.setEnabled(true);
+        unknownCard.setVisible(true);
         pauseButton.setVisible(true);
-        p1lives.setText("Lives: " + Integer.toString(p1Lives));
-        p2lives.setText("Lives: " + Integer.toString(p2Lives));
+        p1lives.setText("Lives: " + Integer.toString(player1.getLives()));
+        p1lives.setForeground(Color.white);
+        p2lives.setForeground(Color.white);
+        p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
 
     }
 
@@ -392,97 +364,97 @@ public class maingame extends JFrame implements ActionListener {
         rockButton.setVisible(false);
         paperButton.setVisible(false);
         scissorButton.setVisible(false);
-        rockLabel1.setVisible(false);
-        paperLabel1.setVisible(false);
-        scissorsLabel1.setVisible(false);
+        unknownCard.setVisible(false);
     }
 
     // LAGAY NALANG NATIN SA MGA METHODS YUNG MABABAWASAN YUNG LIFE
     public void p1Life1() {
-        int livesp1 = p1Lives - 1;
-        p1Lives = livesp1;
-        p1lives.setText("Lives: " + Integer.toString(p1Lives));
+        int livesp1 = player1.getLives() - 1;
+        player1.setLives(livesp1);
+        p1lives.setText("Lives: " + Integer.toString(player1.getLives()));
 
     }
 
     public void computerLife1() {
-        int livesp2 = p2Lives - 1;
-        p2Lives = livesp2;
-        p2lives.setText("Lives: " + Integer.toString(p2Lives));
+        int livesp2 = computer.getLives() - 1;
+        computer.setLives(livesp2);
+        p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
     }
 
     public void p1Life2() {
-        int livesp1 = p1Lives - 2;
-        p1Lives = livesp1;
-        p1lives.setText("Lives: " + Integer.toString(p1Lives));
+        int livesp1 = player1.getLives() - 2;
+        player1.setLives(livesp1);
+        p1lives.setText("Lives: " + Integer.toString(player1.getLives()));
     }
 
     public void computerLife2() {
-        int livesp2 = p2Lives - 2;
-        p2Lives = livesp2;
-        p2lives.setText("Lives: " + Integer.toString(p2Lives));
+        int livesp2 = computer.getLives() - 2;
+        computer.setLives(livesp2);
+        p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
     }
 
     public void proceed() {
         randomChoice = new Random();
+
+        // RANDOMIZER FOR COMPUTER TO SELECT WHAT OBJECT
         int computerChoice = randomChoice.nextInt(3);
-        computerObj = (objects[computerChoice]);
+        computer.setChoice(objects[computerChoice]);
         computerCard = computerChoice;
 
         Random randomChoiceofElement = new Random();
         int randomInfuse = randomChoiceofElement.nextInt(3);
-        // INFUSAL OF ELEMENT FOR computer
+        // INFUSAL OF ELEMENT FOR COMPUTER
 
-        if (computerObj.equals("rock")) {
+        if (computer.getChoice().equals("rock")) {
             if (randomInfuse == 0) {
-                rockLabel1.setIcon(new ImageIcon("Fire Series\\Fire Rock (266x365).png"));
-                computerElement = "fire";
+                unknownCard.setIcon(new ImageIcon("Fire Series\\Fire Rock (266x365).png"));
+                computer.setElement("fire");
             } else if (randomInfuse == 1) {
-                rockLabel1.setIcon(new ImageIcon("Water Series\\Water Rock(266x365).png"));
-                computerElement = "water";
+                unknownCard.setIcon(new ImageIcon("Water Series\\Water Rock(266x365).png"));
+                computer.setElement("water");
             } else if (randomInfuse == 2) {
-                rockLabel1.setIcon(new ImageIcon("Leaf Series\\Leaf Rock (266x365).png"));
-                computerElement = "leaf";
+                unknownCard.setIcon(new ImageIcon("Leaf Series\\Leaf Rock (266x365).png"));
+                computer.setElement("leaf");
             }
-        } else if (computerObj.equals("paper")) {
+        } else if (computer.getChoice().equals("paper")) {
             if (randomInfuse == 0) {
-                rockLabel1.setIcon(new ImageIcon("Fire Series\\Fire Rock (266x365).png"));
-                computerElement = "fire";
+                unknownCard.setIcon(new ImageIcon("Fire Series\\Fire Rock (266x365).png"));
+                computer.setElement("fire");
             } else if (randomInfuse == 1) {
-                rockLabel1.setIcon(new ImageIcon("Water Series\\Water Rock(266x365).png"));
-                computerElement = "water";
+                unknownCard.setIcon(new ImageIcon("Water Series\\Water Rock(266x365).png"));
+                computer.setElement("water");
             } else if (randomInfuse == 2) {
-                rockLabel1.setIcon(new ImageIcon("Leaf Series\\Leaf Rock (266x365).png"));
-                computerElement = "leaf";
+                unknownCard.setIcon(new ImageIcon("Leaf Series\\Leaf Rock (266x365).png"));
+                computer.setElement("leaf");
             }
-        } else if (computerObj.equals("scissors")) {
+        } else if (computer.getChoice().equals("scissors")) {
             if (randomInfuse == 0) {
-                rockLabel1.setIcon(new ImageIcon("Fire Series\\Fire Rock (266x365).png"));
-                computerElement = "fire";
+                unknownCard.setIcon(new ImageIcon("Fire Series\\Fire Rock (266x365).png"));
+                computer.setElement("fire");
             } else if (randomInfuse == 1) {
-                rockLabel1.setIcon(new ImageIcon("Water Series\\Water Rock(266x365).png"));
-                computerElement = "water";
+                unknownCard.setIcon(new ImageIcon("Water Series\\Water Rock(266x365).png"));
+                computer.setElement("water");
             } else if (randomInfuse == 2) {
-                rockLabel1.setIcon(new ImageIcon("Leaf Series\\Leaf Rock (266x365).png"));
-                computerElement = "leaf";
+                unknownCard.setIcon(new ImageIcon("Leaf Series\\Leaf Rock (266x365).png"));
+                computer.setElement("leaf");
             }
         }
 
         randomChoice = new Random();
         int randomElement = randomChoice.nextInt(3);
-        p1Element = (elements[randomElement]);
+        player1.setElement((elements[randomElement]));
 
         // INFUSAL OF ELEMENTS FOR PLAYER
-        if (p1Choice.equals("rock")) {
-            if (p1Element.equals("fire")) {
+        if (player1.getChoice().equals("rock")) {
+            if (player1.getElement().equals("fire")) {
                 rockButton.setIcon(new ImageIcon("Fire Series\\Fire Rock (266x365).png"));
-            } else if (p1Element.equals("water")) {
+            } else if (player1.getElement().equals("water")) {
                 rockButton.setIcon(new ImageIcon("Water Series\\Water Rock(266x365).png"));
-            } else if (p1Element.equals("leaf")) {
+            } else if (player1.getElement().equals("leaf")) {
                 rockButton.setIcon(new ImageIcon("Leaf Series\\Leaf Rock (266x365).png"));
             }
 
-        } else if (p1Choice.equals("paper")) {
+        } else if (player1.getChoice().equals("paper")) {
             if (randomElement == 0) {
                 paperButton.setIcon(new ImageIcon("Fire Series\\Fire Paper (266x365).png"));
             } else if (randomElement == 1) {
@@ -490,7 +462,7 @@ public class maingame extends JFrame implements ActionListener {
             } else if (randomElement == 2) {
                 paperButton.setIcon(new ImageIcon("Leaf Series\\Leaf Paper (266x365).png"));
             }
-        } else if (p1Choice.equals("scissors")) {
+        } else if (player1.getChoice().equals("scissors")) {
             if (randomElement == 0) {
                 scissorButton.setIcon(new ImageIcon("Fire Series\\Fire Scissor(266x365).png"));
             } else if (randomElement == 1) {
@@ -508,201 +480,205 @@ public class maingame extends JFrame implements ActionListener {
                 scissorButton.setIcon(new ImageIcon("Default RPS\\Default Scissor (266x365).png"));
             }
         };
-        timer.schedule(task, 1000);
+        timer.schedule(task, 2000);
 
-        if (computerObj.equals("rock")) {
-            rockLabel1.setVisible(true);
-            if (computerElement.equals("fire")) {
-                rockLabel1.setIcon(new ImageIcon("Fire Series\\Fire Rock (266x365).png"));
-            } else if (computerElement.equals("water")) {
-                rockLabel1.setIcon(new ImageIcon("Water Series\\Water Rock(266x365).png"));
-            } else if (computerElement.equals("leaf")) {
-                rockLabel1.setIcon(new ImageIcon("Leaf Series\\Leaf Rock (266x365).png"));
+        if (computer.getChoice().equals("rock")) {
+            if (computer.getElement().equals("fire")) {
+                unknownCard.setIcon(new ImageIcon("Fire Series\\Fire Rock (266x365).png"));
+            } else if (computer.getElement().equals("water")) {
+                unknownCard.setIcon(new ImageIcon("Water Series\\Water Rock(266x365).png"));
+            } else if (computer.getElement().equals("leaf")) {
+                unknownCard.setIcon(new ImageIcon("Leaf Series\\Leaf Rock (266x365).png"));
             }
-            paperLabel1.setVisible(false);
-            scissorsLabel1.setVisible(false);
-        } else if (computerObj.equals("paper")) {
-            rockLabel1.setVisible(false);
-            paperLabel1.setVisible(true);
-            if (computerElement.equals("fire")) {
-                paperLabel1.setIcon(new ImageIcon("Fire Series\\Fire Paper (266x365).png"));
-            } else if (computerElement.equals("water")) {
-                paperLabel1.setIcon(new ImageIcon("Water Series\\Water Paper(266x365).png"));
-            } else if (computerElement.equals("leaf")) {
-                paperLabel1.setIcon(new ImageIcon("Leaf Series\\Leaf Paper (266x365).png"));
+        } else if (computer.getChoice().equals("paper")) {
+            if (computer.getElement().equals("fire")) {
+                unknownCard.setIcon(new ImageIcon("Fire Series\\Fire Paper (266x365).png"));
+            } else if (computer.getElement().equals("water")) {
+                unknownCard.setIcon(new ImageIcon("Water Series\\Water Paper(266x365).png"));
+            } else if (computer.getElement().equals("leaf")) {
+                unknownCard.setIcon(new ImageIcon("Leaf Series\\Leaf Paper (266x365).png"));
             }
-            scissorsLabel1.setVisible(false);
-        } else if (computerObj.equals("scissors")) {
-            rockLabel1.setVisible(false);
-            paperLabel1.setVisible(false);
-            scissorsLabel1.setVisible(true);
-            if (computerElement.equals("fire")) {
-                scissorsLabel1.setIcon(new ImageIcon("Fire Series\\Fire Scissor(266x365).png"));
-            } else if (computerElement.equals("water")) {
-                scissorsLabel1.setIcon(new ImageIcon("Water Series\\Water Scissors (266x365).png"));
-            } else if (computerElement.equals("leaf")) {
-                scissorsLabel1.setIcon(new ImageIcon("Leaf Series\\Leaf Scissor (266x365).png"));
+        } else if (computer.getChoice().equals("scissors")) {
+            if (computer.getElement().equals("fire")) {
+                unknownCard.setIcon(new ImageIcon("Fire Series\\Fire Scissor(266x365).png"));
+            } else if (computer.getElement().equals("water")) {
+                unknownCard.setIcon(new ImageIcon("Water Series\\Water Scissors (266x365).png"));
+            } else if (computer.getElement().equals("leaf")) {
+                unknownCard.setIcon(new ImageIcon("Leaf Series\\Leaf Scissor (266x365).png"));
             }
         }
+
+        Timer time = new Timer();
+        TimerTask task1 = new TimerTask() {
+            public void run() {
+                unknownCard.setIcon(new ImageIcon("Default RPS\\unknown  266x365.png"));
+            }
+        };
+        time.schedule(task1, 2000);
 
         // ON THE FOLLOWING BLOCK OF CODE, THE PROGRAM WILL DETERMINE WHO IS THE WINNER
         // PLAYER 1 ROCK AND FIRE
 
-        if (p1Choice.equals("rock") && p1Element.equals("fire")) {
-            if (computerObj.equals("rock") && computerElement.equals("fire")) {
+        if (player1.getChoice().equals("rock") && player1.getElement().equals("fire")) {
+            if (computer.getChoice().equals("rock") && computer.getElement().equals("fire")) {
                 // DO NOTHING KASI DRAW NAMAN
-            } else if ((computerObj.equals("rock") && computerElement.equals("water")) ||
-                    (computerObj.equals("paper") && computerElement.equals("fire")) ||
-                    (computerObj.equals("paper") && computerElement.equals("leaf"))) {
+            } else if ((computer.getChoice().equals("rock") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("leaf"))) {
                 p1Life1();
-            } else if (computerObj.equals("rock") && computerElement.equals("leaf") ||
-                    (computerObj.equals("scissors") && computerElement.equals("fire")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("water"))) {
+            } else if (computer.getChoice().equals("rock") && computer.getElement().equals("leaf") ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("water"))) {
                 computerLife1();
-            } else if (computerObj.equals("paper") && computerElement.equals("water")) {
+            } else if (computer.getChoice().equals("paper") && computer.getElement().equals("water")) {
                 p1Life2();
-            } else if (computerObj.equals("scissors") && computerElement.equals("leaf")) {
+            } else if (computer.getChoice().equals("scissors") && computer.getElement().equals("leaf")) {
                 computerLife2();
             }
         }
         // PLAYER 1 ROCK AND WATER
-        else if (p1Choice.equals("rock") && p1Element.equals("water")) {
-            if ((computerObj.equals("rock") && computerElement.equals("leaf")) ||
-                    (computerObj.equals("paper") && computerElement.equals("fire")) ||
-                    (computerObj.equals("paper") && computerElement.equals("water"))) {
+        else if (player1.getChoice().equals("rock") && player1.getElement().equals("water")) {
+            if ((computer.getChoice().equals("rock") && computer.getElement().equals("leaf")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("water"))) {
                 p1Life1();
-            } else if ((computerObj.equals("rock") && computerElement.equals("fire")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("water")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("leaf"))) {
+            } else if ((computer.getChoice().equals("rock") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("leaf"))) {
                 computerLife1();
-            } else if (computerObj.equals("paper") && computerElement.equals("leaf")) {
+            } else if (computer.getChoice().equals("paper") && computer.getElement().equals("leaf")) {
                 p1Life2();
-            } else if (computerObj.equals("scissors") && computerElement.equals("fire")) {
+            } else if (computer.getChoice().equals("scissors") && computer.getElement().equals("fire")) {
                 computerLife2();
             }
         }
         // PLAYER 1 ROCK AND LEAF
-        else if (p1Choice.equals("rock") && p1Element.equals("leaf")) {
-            if ((computerObj.equals("rock") && computerElement.equals("fire")) ||
-                    (computerObj.equals("paper") && computerElement.equals("leaf")) ||
-                    (computerObj.equals("paper") && computerElement.equals("water"))) {
+        else if (player1.getChoice().equals("rock") && player1.getElement().equals("leaf")) {
+            if ((computer.getChoice().equals("rock") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("leaf")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("water"))) {
                 p1Life1();
-            } else if ((computerObj.equals("rock") && computerElement.equals("water")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("fire")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("leaf"))) {
+            } else if ((computer.getChoice().equals("rock") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("leaf"))) {
                 computerLife1();
-            } else if (computerObj.equals("paper") && computerElement.equals("fire")) {
+            } else if (computer.getChoice().equals("paper") && computer.getElement().equals("fire")) {
                 p1Life2();
-            } else if (computerObj.equals("scissors") && computerElement.equals("water")) {
+            } else if (computer.getChoice().equals("scissors") && computer.getElement().equals("water")) {
                 computerLife2();
             }
         }
         // PLAYER 1 PAPER AND FIRE
-        else if (p1Choice.equals("paper") && p1Element.equals("fire")) {
-            if ((computerObj.equals("paper") && computerElement.equals("water")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("fire")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("leaf"))) {
+        else if (player1.getChoice().equals("paper") && player1.getElement().equals("fire")) {
+            if ((computer.getChoice().equals("paper") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("leaf"))) {
                 p1Life1();
-            } else if ((computerObj.equals("rock") && computerElement.equals("fire")) ||
-                    (computerObj.equals("rock") && computerElement.equals("water")) ||
-                    (computerObj.equals("paper") && computerElement.equals("leaf"))) {
+            } else if ((computer.getChoice().equals("rock") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("rock") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("leaf"))) {
                 computerLife1();
-            } else if (computerObj.equals("scissors") && computerElement.equals("water")) {
+            } else if (computer.getChoice().equals("scissors") && computer.getElement().equals("water")) {
                 p1Life2();
-            } else if (computerObj.equals("rock") && computerElement.equals("leaf")) {
+            } else if (computer.getChoice().equals("rock") && computer.getElement().equals("leaf")) {
                 computerLife2();
             }
         }
         // PLAYER 1 PAPER AND WATER
-        else if (p1Choice.equals("paper") && p1Element.equals("water")) {
-            if ((computerObj.equals("paper") && computerElement.equals("leaf")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("fire")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("water"))) {
+        else if (player1.getChoice().equals("paper") && player1.getElement().equals("water")) {
+            if ((computer.getChoice().equals("paper") && computer.getElement().equals("leaf")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("water"))) {
                 p1Life1();
-            } else if ((computerObj.equals("rock") && computerElement.equals("water")) ||
-                    (computerObj.equals("rock") && computerElement.equals("leaf")) ||
-                    (computerObj.equals("paper") && computerElement.equals("fire"))) {
+            } else if ((computer.getChoice().equals("rock") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("rock") && computer.getElement().equals("leaf")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("fire"))) {
                 computerLife1();
-            } else if (computerObj.equals("scissors") && computerElement.equals("leaf")) {
+            } else if (computer.getChoice().equals("scissors") && computer.getElement().equals("leaf")) {
                 p1Life2();
-            } else if (computerObj.equals("rock") && computerElement.equals("fire")) {
+            } else if (computer.getChoice().equals("rock") && computer.getElement().equals("fire")) {
                 computerLife2();
             }
         }
         // PLAYER 1 PAPER AND LEAF
-        else if (p1Choice.equals("paper") && p1Element.equals("leaf")) {
-            if ((computerObj.equals("paper") && computerElement.equals("fire")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("water")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("leaf"))) {
+        else if (player1.getChoice().equals("paper") && player1.getElement().equals("leaf")) {
+            if ((computer.getChoice().equals("paper") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("leaf"))) {
                 p1Life1();
-            } else if ((computerObj.equals("rock") && computerElement.equals("fire")) ||
-                    (computerObj.equals("rock") && computerElement.equals("leaf")) ||
-                    (computerObj.equals("paper") && computerElement.equals("water"))) {
+            } else if ((computer.getChoice().equals("rock") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("rock") && computer.getElement().equals("leaf")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("water"))) {
                 computerLife1();
-            } else if (computerObj.equals("scissors") && computerElement.equals("fire")) {
+            } else if (computer.getChoice().equals("scissors") && computer.getElement().equals("fire")) {
                 p1Life2();
-            } else if (computerObj.equals("rock") && computerElement.equals("water")) {
+            } else if (computer.getChoice().equals("rock") && computer.getElement().equals("water")) {
                 computerLife2();
             }
         }
         // PLAYER 1 SCISSORS AND FIRE
-        else if (p1Choice.equals("scissors") && p1Element.equals("fire")) {
-            if ((computerObj.equals("rock") && computerElement.equals("fire")) ||
-                    (computerObj.equals("rock") && computerElement.equals("leaf")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("water"))) {
+        else if (player1.getChoice().equals("scissors") && player1.getElement().equals("fire")) {
+            if ((computer.getChoice().equals("rock") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("rock") && computer.getElement().equals("leaf")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("water"))) {
                 p1Life1();
-            } else if ((computerObj.equals("paper") && computerElement.equals("fire")) ||
-                    (computerObj.equals("paper") && computerElement.equals("water")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("leaf"))) {
+            } else if ((computer.getChoice().equals("paper") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("leaf"))) {
                 computerLife1();
-            } else if (computerObj.equals("rock") && computerElement.equals("water")) {
+            } else if (computer.getChoice().equals("rock") && computer.getElement().equals("water")) {
                 p1Life2();
-            } else if (computerObj.equals("paper") && computerElement.equals("leaf")) {
+            } else if (computer.getChoice().equals("paper") && computer.getElement().equals("leaf")) {
                 computerLife2();
             }
         }
         // PLAYER 1 SCISSORS AND WATER
-        else if (p1Choice.equals("scissors") && p1Element.equals("water")) {
-            if ((computerObj.equals("rock") && computerElement.equals("fire")) ||
-                    (computerObj.equals("rock") && computerElement.equals("water")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("leaf"))) {
+        else if (player1.getChoice().equals("scissors") && player1.getElement().equals("water")) {
+            if ((computer.getChoice().equals("rock") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("rock") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("leaf"))) {
                 p1Life1();
-            } else if ((computerObj.equals("paper") && computerElement.equals("water")) ||
-                    (computerObj.equals("paper") && computerElement.equals("leaf")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("fire"))) {
+            } else if ((computer.getChoice().equals("paper") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("leaf")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("fire"))) {
                 computerLife1();
-            } else if (computerObj.equals("rock") && computerElement.equals("leaf")) {
+            } else if (computer.getChoice().equals("rock") && computer.getElement().equals("leaf")) {
                 p1Life2();
-            } else if (computerObj.equals("paper") && computerElement.equals("fire")) {
+            } else if (computer.getChoice().equals("paper") && computer.getElement().equals("fire")) {
                 computerLife2();
             }
         }
         // PLAYER 1 SCISSORS AND LEAF
-        else if (p1Choice.equals("scissors") && p1Element.equals("leaf")) {
-            if ((computerObj.equals("rock") && computerElement.equals("water")) ||
-                    (computerObj.equals("rock") && computerElement.equals("leaf")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("fire"))) {
+        else if (player1.getChoice().equals("scissors") && player1.getElement().equals("leaf")) {
+            if ((computer.getChoice().equals("rock") && computer.getElement().equals("water")) ||
+                    (computer.getChoice().equals("rock") && computer.getElement().equals("leaf")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("fire"))) {
                 p1Life1();
-            } else if ((computerObj.equals("paper") && computerElement.equals("fire")) ||
-                    (computerObj.equals("paper") && computerElement.equals("leaf")) ||
-                    (computerObj.equals("scissors") && computerElement.equals("water"))) {
+            } else if ((computer.getChoice().equals("paper") && computer.getElement().equals("fire")) ||
+                    (computer.getChoice().equals("paper") && computer.getElement().equals("leaf")) ||
+                    (computer.getChoice().equals("scissors") && computer.getElement().equals("water"))) {
                 computerLife1();
-            } else if (computerObj.equals("rock") && computerElement.equals("fire")) {
+            } else if (computer.getChoice().equals("rock") && computer.getElement().equals("fire")) {
                 p1Life2();
-            } else if (computerObj.equals("paper") && computerElement.equals("water")) {
+            } else if (computer.getChoice().equals("paper") && computer.getElement().equals("water")) {
                 computerLife2();
             }
         }
 
-        if (p1Lives <= 0) {
+        if (player1.getLives() <= 0) {
             gameOver.setText("Game over!");
             p1lives.setText("Lives: 0");
-
             gameIsOver();
-        } else if (p2Lives <= 0) {
+        } else if (computer.getLives() <= 0) {
             p2lives.setText("Lives: 0");
             gameOver.setText("You won");
             gameIsOver();
+        } else if (player1.getLives() == 1 && computer.getLives() == 1) {
+            round.setText("Final round");
+        } else if (player1.getLives() <= 3) {
+            p1lives.setForeground(Color.red);
+        } else if (computer.getLives() <= 3) {
+            p2lives.setForeground(Color.red);
         } else {
             roundNo += 1;
             round.setText("Round No: " + Integer.toString(roundNo));
@@ -712,7 +688,7 @@ public class maingame extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
 
-        maingame mainGame = new maingame();
+        game mainGame = new game();
 
     }
 }
