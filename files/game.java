@@ -1,14 +1,9 @@
 package files;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
 //PVE
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.Random;
 import java.awt.Color;
 import java.awt.Font;
@@ -16,14 +11,14 @@ import java.awt.Image;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class game extends JFrame implements ActionListener {
+public class game extends JPanel implements ActionListener {
 
     JLabel p1lives, p2lives, status, name1, name2, paused, overlay, background,
-            gameOver, nameplate, nameplate2, round, sampleLog, unknownCard;
-    JPanel bg;
+            gameOver, nameplate, nameplate2, round, unknownCard;
+    JPanel bg, confirmation, thisPanel;
     ImageIcon board, namplates;
     Random randomChoice;
-    JButton rockButton, paperButton, scissorButton, retryButton, pauseButton, playButton, newGame;
+    JButton rockButton, paperButton, scissorButton, retryButton, pauseButton, playButton, newGame, homeButton, yes, no;
     String[] objects = { "rock", "paper", "scissors" };
     String[] elements = { "fire", "water", "leaf" };
     String[] boards = { "boards\\magam.png", "boards\\sky.png", "boards\\snad.png", "boards\\wood.png" };
@@ -34,40 +29,21 @@ public class game extends JFrame implements ActionListener {
     Image boardImage, boardResized;
     players player1 = new players();
     players computer = new players();
-    Clip clip, panalo, natalo, absolute;
+    music gameMusic = new music();
+
+    boolean p1Won, p2Won = false;
 
     game() {
-        File file = new File("sounds\\pve.wav");
-        File victory = new File("sounds\\victory.wav");
-        File defeat = new File("sounds\\defeat.wav");
-        File crit = new File("sounds\\crit.WAV");
-        try {
-            AudioInputStream sound = AudioSystem.getAudioInputStream(file);
-            clip = AudioSystem.getClip();
-            clip.open(sound);
 
-            sound = AudioSystem.getAudioInputStream(victory);
-            panalo = AudioSystem.getClip();
-            panalo.open(sound);
+        thisPanel = new JPanel();
+        thisPanel.setLocation(0, 0);
+        thisPanel.setSize(1920, 1080);
+        thisPanel.setVisible(true);
+        thisPanel.setLayout(null);
+        this.add(thisPanel);
 
-            sound = AudioSystem.getAudioInputStream(defeat);
-            natalo = AudioSystem.getClip();
-            natalo.open(sound);
-
-            sound = AudioSystem.getAudioInputStream(crit);
-            absolute = AudioSystem.getClip();
-            absolute.open(sound);
-
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        absolute.stop();
-        panalo.stop();
-        natalo.stop();
-        clip.start();
         roundNo = 1;
+        // gameMusic.playPvEMode();
 
         randomBg = new Random();
         randomIndex = randomBg.nextInt(4);
@@ -81,7 +57,7 @@ public class game extends JFrame implements ActionListener {
         overlay.setIcon(vignette);
         overlay.setSize(1920, 1080);
         overlay.setVisible(false);
-        this.add(overlay);
+        thisPanel.add(overlay);
 
         // SET THE CONFIGURATION OF PLAYER 1 NAME
         name1 = new JLabel();
@@ -90,7 +66,7 @@ public class game extends JFrame implements ActionListener {
         name1.setSize(150, 30);
         name1.setFont(new Font("DePixel", Font.BOLD, 23));
         name1.setForeground(Color.WHITE);
-        this.add(name1);
+        thisPanel.add(name1);
 
         // ETO NAMAN YUNG SA LIVES NILA
         p1lives = new JLabel();
@@ -99,7 +75,7 @@ public class game extends JFrame implements ActionListener {
         p1lives.setForeground(Color.white);
         p1lives.setSize(150, 30);
         p1lives.setLocation(315, 120);
-        this.add(p1lives);
+        thisPanel.add(p1lives);
 
         p2lives = new JLabel();
         p2lives.setText("Lives: " + computer.getLives());
@@ -107,7 +83,7 @@ public class game extends JFrame implements ActionListener {
         p2lives.setFont(new Font("DePixel", Font.BOLD, 18));
         p2lives.setSize(150, 30);
         p2lives.setLocation(1100, 120);
-        this.add(p2lives);
+        thisPanel.add(p2lives);
 
         // SET THE CONFIGURATION OF COMPUTER NAME
         name2 = new JLabel();
@@ -116,7 +92,7 @@ public class game extends JFrame implements ActionListener {
         name2.setForeground(Color.WHITE);
         name2.setSize(175, 30);
         name2.setFont(new Font("DePixel", Font.BOLD, 23));
-        this.add(name2);
+        thisPanel.add(name2);
 
         // SET THE ROUND INDICATOR
         round = new JLabel();
@@ -124,21 +100,21 @@ public class game extends JFrame implements ActionListener {
         round.setForeground(Color.white);
         round.setText("Round No: " + Integer.toString(roundNo));
         round.setLocation(750, 100);
-        this.add(round);
+        thisPanel.add(round);
 
         // SET THE POSITIONS OF NAMEPLATE
         nameplate = new JLabel();
         nameplate.setSize(390, 120);
         nameplate.setLocation(180, 50);
         nameplate.setIcon(new ImageIcon(nameplates[randomIndex]));
-        this.add(nameplate);
+        thisPanel.add(nameplate);
 
         // SET THE POSITIONS OF NAMEPLATE
         nameplate2 = new JLabel();
         nameplate2.setSize(390, 120);
         nameplate2.setLocation(965, 50);
         nameplate2.setIcon(new ImageIcon(nameplates[randomIndex]));
-        this.add(nameplate2);
+        thisPanel.add(nameplate2);
 
         // RETRY BUTTON
         ImageIcon newGameIcon = new ImageIcon(
@@ -152,7 +128,7 @@ public class game extends JFrame implements ActionListener {
         retryButton.addActionListener(this);
         retryButton.addActionListener(e -> player1.setLives(10));
         retryButton.addActionListener(e -> computer.setLives(10));
-        this.add(retryButton);
+        thisPanel.add(retryButton);
 
         // PAUSE BUTTON
         ImageIcon pauseIcon = new ImageIcon(
@@ -166,19 +142,27 @@ public class game extends JFrame implements ActionListener {
         pauseButton.setFocusPainted(false);
         pauseButton.setContentAreaFilled(false);
         pauseButton.addActionListener(e -> pauseMethod());
-        this.add(pauseButton);
+        thisPanel.add(pauseButton);
 
         paused = new JLabel("Game Paused");
         paused.setFont(new Font("DePixel", Font.BOLD, 48));
         paused.setSize(500, 70);
         paused.setLocation(570, 300);
         paused.setVisible(false);
-        this.add(paused);
+        thisPanel.add(paused);
 
-        // NEW GAME BUTTON
+        // SET THE HOME BUTTON
+        homeButton = new JButton("Home");
+        homeButton.setSize(32, 32);
+        homeButton.setLocation(750, 500);
+        homeButton.setVisible(false);
+        homeButton.addActionListener(e -> homeButton());
+        thisPanel.add(homeButton);
+
+        // NEW GAME BUTTON (INSIDE THE PAUSE BUTTON)
         newGame = new JButton(newGameIcon);
         newGame.setSize(32, 32);
-        newGame.setLocation(700, 500);
+        newGame.setLocation(600, 500);
         newGame.setVisible(false);
         newGame.setBorderPainted(false);
         newGame.setFocusPainted(false);
@@ -186,7 +170,7 @@ public class game extends JFrame implements ActionListener {
         newGame.setFocusable(false);
         newGame.addActionListener(this);
         newGame.addActionListener(e -> tryAgain());
-        this.add(newGame);
+        thisPanel.add(newGame);
 
         // PLAY BUTTON
         ImageIcon playIcon = new ImageIcon("Buttons\\play_continue (w_color).png");
@@ -196,17 +180,17 @@ public class game extends JFrame implements ActionListener {
         playButton.setBorderPainted(false);
         playButton.setFocusPainted(false);
         playButton.setContentAreaFilled(false);
-        playButton.setLocation(800, 500);
+        playButton.setLocation(900, 500);
         playButton.setVisible(false);
         playButton.addActionListener(e -> playMethod());
-        this.add(playButton);
+        thisPanel.add(playButton);
 
         gameOver = new JLabel();
         gameOver.setFont(new Font("DePixel", Font.BOLD, 48));
         gameOver.setSize(500, 70);
         gameOver.setLocation(600, 300);
         gameOver.setVisible(false);
-        this.add(gameOver);
+        thisPanel.add(gameOver);
 
         // COMFIGURATIONS NG ROCK PAPER AND SCISSORS
         rockButton = new JButton();
@@ -218,7 +202,7 @@ public class game extends JFrame implements ActionListener {
         rockButton.setBorderPainted(false);
         rockButton.addActionListener(e -> proceed());
         rockButton.addActionListener(e -> player1.setChoice("rock"));
-        this.add(rockButton);
+        thisPanel.add(rockButton);
 
         paperButton = new JButton();
         paperButton.setSize(240, 360);
@@ -228,7 +212,7 @@ public class game extends JFrame implements ActionListener {
         paperButton.setBorderPainted(false);
         paperButton.addActionListener(e -> proceed());
         paperButton.addActionListener(e -> player1.setChoice("paper"));
-        this.add(paperButton);
+        thisPanel.add(paperButton);
 
         scissorButton = new JButton();
         scissorButton.setSize(240, 360);
@@ -238,14 +222,14 @@ public class game extends JFrame implements ActionListener {
         scissorButton.setBorderPainted(false);
         scissorButton.addActionListener(e -> proceed());
         scissorButton.addActionListener(e -> player1.setChoice("scissors"));
-        this.add(scissorButton);
+        thisPanel.add(scissorButton);
 
         // LABELS OF ROCK PAPER SCISORS BUT AS IMAGES FOR COMPUTER SIDE
         unknownCard = new JLabel();
         unknownCard.setIcon(new ImageIcon("default series\\backcard.png"));
         unknownCard.setSize(240, 360);
         unknownCard.setLocation(1000, 280);
-        this.add(unknownCard);
+        thisPanel.add(unknownCard);
 
         // SET THE BACKGROUND OF THE BOARD
         board = new ImageIcon(boards[randomIndex]);
@@ -264,19 +248,32 @@ public class game extends JFrame implements ActionListener {
         bg.setLocation(0, 0);
         bg.add(background);
         bg.setLayout(null);
-        this.add(bg);
+        thisPanel.add(bg);
 
         // CONFIGURATION NG GUI
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("Ropersors");
         this.setLayout(null);
         this.setVisible(true);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setSize(1550, 830);
-        this.setResizable(false);
         // this.setUndecorated(true);
-        ImageIcon icon = new ImageIcon("6793733.png");
-        this.setIconImage(icon.getImage());
+    }
+
+    // PLAY THE SOUND IF THE FRAME IS VISIBLE
+    public void pleasePlay() {
+        gameMusic.playPvEMode();
+        thisPanel.setVisible(true);
+    }
+
+    public void homeButton() {
+        mainMenu haha = new mainMenu();
+        JPanel menuPanel = new JPanel();
+        menuPanel = new JPanel();
+        menuPanel.setSize(1550, 830);
+        menuPanel.setLayout(null);
+        menuPanel.add(haha);
+        this.add(menuPanel);
+        thisPanel.setVisible(false);
+
+        gameMusic.stopPveMode();
     }
 
     // CHANGES THE BACKGROUND ALONG WITH THE NAMEPLATE
@@ -298,7 +295,7 @@ public class game extends JFrame implements ActionListener {
     // TRY AGAIN OR NEW GAME NA NAKALAGAY SA MAY PAUSE WINDOW
     public void tryAgain() {
         playMethod();
-        clip.setFramePosition(0);
+        gameMusic.gameRestart1Normal();
         unknownCard.setVisible(true);
         unknownCard.setIcon(new ImageIcon("default series\\backcard.png"));
         pauseButton.setVisible(true);
@@ -319,6 +316,7 @@ public class game extends JFrame implements ActionListener {
 
     // ISET NATIN YUNG SA PAUSE METHOD
     public void pauseMethod() {
+        homeButton.setVisible(true);
         rockButton.setVisible(false);
         paperButton.setVisible(false);
         scissorButton.setVisible(false);
@@ -338,6 +336,7 @@ public class game extends JFrame implements ActionListener {
 
     // ETO NAMAN YUNG SA PLAY
     public void playMethod() {
+        homeButton.setVisible(false);
         overlay.setVisible(false);
         unknownCard.setVisible(true);
         rockButton.setVisible(true);
@@ -358,11 +357,17 @@ public class game extends JFrame implements ActionListener {
     // ETONG METHOD NA TO, ETO YUNG PARA MAG NEW GAME ULIT KUNG SAKALING ANG ISA AY
     // MATALO
     public void retry(ActionEvent e) {
+        if (p1Won == true) {
+            System.out.println("hahah");
+            gameMusic.gameRestart1Won();
+        } else if (p2Won == true) {
+            gameMusic.gameRestart1Lost();
+            System.out.println("hehe");
+        } else {
+            System.out.println("hoho");
+        }
         roundNo = 1;
-        panalo.stop();
-        natalo.stop();
-        clip.start();
-        clip.setFramePosition(0);
+        homeButton.setVisible(false);
         round.setText("Round No: " + roundNo);
         player1.setLives(10);
         computer.setLives(10);
@@ -381,7 +386,8 @@ public class game extends JFrame implements ActionListener {
         p1lives.setForeground(Color.white);
         p2lives.setForeground(Color.white);
         p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
-
+        p1Won = false;
+        p2Won = false;
     }
 
     public void gameIsOver() {
@@ -413,16 +419,14 @@ public class game extends JFrame implements ActionListener {
         int livesp1 = player1.getLives() - 2;
         player1.setLives(livesp1);
         p1lives.setText("Lives: " + Integer.toString(player1.getLives()));
-        absolute.setFramePosition(0);
-        absolute.start();
+        gameMusic.absoluteSound();
     }
 
     public void computerLife2() {
         int livesp2 = computer.getLives() - 2;
         computer.setLives(livesp2);
         p2lives.setText("Lives: " + Integer.toString(computer.getLives()));
-        absolute.setFramePosition(0);
-        absolute.start();
+        gameMusic.absoluteSound();
     }
 
     public void proceed() {
@@ -666,18 +670,16 @@ public class game extends JFrame implements ActionListener {
         }
 
         if (player1.getLives() <= 0) {
+            p2Won = true;
             gameOver.setText("Game over!");
             p1lives.setText("Lives: 0");
-            clip.stop();
-            natalo.start();
-            natalo.loop(Clip.LOOP_CONTINUOUSLY);
+            gameMusic.looser();
             gameIsOver();
         } else if (computer.getLives() <= 0) {
+            p1Won = true;
             p2lives.setText("Lives: 0");
             gameOver.setText("You won");
-            clip.stop();
-            panalo.start();
-            panalo.loop(Clip.LOOP_CONTINUOUSLY);
+            gameMusic.winner();
             gameIsOver();
         } else if (player1.getLives() == 1 && computer.getLives() == 1) {
             round.setText("Final round");

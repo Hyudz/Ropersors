@@ -4,11 +4,6 @@ package files;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.File;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Random;
@@ -18,16 +13,15 @@ import java.awt.Image;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class gamev2 extends JFrame implements ActionListener {
+public class gamev2 extends JPanel implements ActionListener {
 
-    Clip clip, panalo, absolute;
     JLabel p1lives, p2lives, status, name1, name2, p1Card, p2Card, paused, overlay, background,
             gameOver, nameplate, nameplate2, round, p1Status, p2Status;
-    JPanel bg, names1, names2;
+    JPanel bg, names1, names2, thisPanel;
     ImageIcon board, namplates;
     Random randomChoice;
     JButton rockButton, paperButton, scissorButton, retryButton, pauseButton, playButton, newGame, rockButton1,
-            paperButton1, scissorsButton1;
+            paperButton1, scissorsButton1, homeButton, yes, no;
     String[] objects = { "rock", "paper", "scissors" };
     String[] elements = { "fire", "water", "leaf" };
     String[] boards = { "boards\\magam.png", "boards\\sky.png", "boards\\snad.png", "boards\\wood.png" };
@@ -38,33 +32,20 @@ public class gamev2 extends JFrame implements ActionListener {
     Image boardImage, boardResized;
     players player1 = new players();
     players player2 = new players();
+    music gameMusic = new music();
 
     boolean p1Choosed, p2Choosed;
+    boolean p1Won, p2Won = false;
 
     public gamev2() {
-        File file = new File("sounds\\pvp.wav");
-        File victory = new File("sounds\\victory.WAV");
-        File crit = new File("sounds\\crit.WAV");
-        try {
-            AudioInputStream sound = AudioSystem.getAudioInputStream(file);
-            clip = AudioSystem.getClip();
-            clip.open(sound);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
 
-            sound = AudioSystem.getAudioInputStream(victory);
-            panalo = AudioSystem.getClip();
-            panalo.open(sound);
+        thisPanel = new JPanel();
+        thisPanel.setLocation(0, 0);
+        thisPanel.setSize(1920, 1080);
+        thisPanel.setVisible(true);
+        thisPanel.setLayout(null);
+        this.add(thisPanel);
 
-            sound = AudioSystem.getAudioInputStream(crit);
-            absolute = AudioSystem.getClip();
-            absolute.open(sound);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        absolute.stop();
-        panalo.stop();
-        clip.start();
         roundNo = 1;
 
         randomBg = new Random();
@@ -79,7 +60,7 @@ public class gamev2 extends JFrame implements ActionListener {
         overlay.setIcon(vignette);
         overlay.setSize(1920, 1080);
         overlay.setVisible(false);
-        this.add(overlay);
+        thisPanel.add(overlay);
 
         // SET THE CONFIGURATION OF PLAYER 1 NAME
         name1 = new JLabel();
@@ -103,7 +84,6 @@ public class gamev2 extends JFrame implements ActionListener {
         p2lives.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         p2lives.setFont(new Font("DePixel", Font.BOLD, 18));
         p2lives.setSize(150, 30);
-        this.add(p2lives);
 
         // SET THE CONFIGURATION OF computer NAME
         name2 = new JLabel();
@@ -134,7 +114,7 @@ public class gamev2 extends JFrame implements ActionListener {
         names1.add(name1);
         names1.add(p1lives);
         names1.add(p1Status);
-        this.add(names1);
+        thisPanel.add(names1);
 
         // PUT THE NAMES LIVES AND STATUS UNDER A PANEL
         names2 = new JPanel();
@@ -145,7 +125,7 @@ public class gamev2 extends JFrame implements ActionListener {
         names2.add(name2);
         names2.add(p2lives);
         names2.add(p2Status);
-        this.add(names2);
+        thisPanel.add(names2);
 
         // SET THE ROUND INDICATOR
         round = new JLabel();
@@ -153,21 +133,21 @@ public class gamev2 extends JFrame implements ActionListener {
         round.setForeground(Color.white);
         round.setText("Round No: " + Integer.toString(roundNo));
         round.setLocation(750, 100);
-        this.add(round);
+        thisPanel.add(round);
 
         // SET THE POSITIONS OF NAMEPLATE 1
         nameplate = new JLabel();
         nameplate.setSize(390, 120);
         nameplate.setLocation(180, 50);
         nameplate.setIcon(new ImageIcon(nameplates[randomIndex]));
-        this.add(nameplate);
+        thisPanel.add(nameplate);
 
         // SET THE POSITIONS OF NAMEPLATE 2
         nameplate2 = new JLabel();
         nameplate2.setSize(390, 120);
         nameplate2.setLocation(965, 50);
         nameplate2.setIcon(new ImageIcon(nameplates[randomIndex]));
-        this.add(nameplate2);
+        thisPanel.add(nameplate2);
 
         // RETRY BUTTON
         ImageIcon newGameIcon = new ImageIcon(
@@ -181,7 +161,7 @@ public class gamev2 extends JFrame implements ActionListener {
         retryButton.addActionListener(this);
         retryButton.addActionListener(e -> player1.setLives(10));
         retryButton.addActionListener(e -> player2.setLives(10));
-        this.add(retryButton);
+        thisPanel.add(retryButton);
 
         // PAUSE BUTTON
         ImageIcon pauseIcon = new ImageIcon(
@@ -195,19 +175,27 @@ public class gamev2 extends JFrame implements ActionListener {
         pauseButton.setFocusPainted(false);
         pauseButton.setContentAreaFilled(false);
         pauseButton.addActionListener(e -> pauseMethod());
-        this.add(pauseButton);
+        thisPanel.add(pauseButton);
 
         paused = new JLabel("Game Paused");
         paused.setFont(new Font("DePixel", Font.BOLD, 48));
         paused.setSize(500, 70);
         paused.setLocation(570, 300);
         paused.setVisible(false);
-        this.add(paused);
+        thisPanel.add(paused);
+
+        // SET THE HOME BUTTON
+        homeButton = new JButton("Home");
+        homeButton.setSize(32, 32);
+        homeButton.setLocation(750, 500);
+        homeButton.setVisible(false);
+        homeButton.addActionListener(e -> homeButton());
+        thisPanel.add(homeButton);
 
         // NEW GAME BUTTON
         newGame = new JButton(newGameIcon);
         newGame.setSize(32, 32);
-        newGame.setLocation(700, 500);
+        newGame.setLocation(600, 500);
         newGame.setVisible(false);
         newGame.setBorderPainted(false);
         newGame.setFocusPainted(false);
@@ -215,7 +203,7 @@ public class gamev2 extends JFrame implements ActionListener {
         newGame.setFocusable(false);
         newGame.addActionListener(this);
         newGame.addActionListener(e -> tryAgain());
-        this.add(newGame);
+        thisPanel.add(newGame);
 
         // PLAY BUTTON
         ImageIcon playIcon = new ImageIcon("Buttons\\play_continue (w_color).png");
@@ -225,27 +213,27 @@ public class gamev2 extends JFrame implements ActionListener {
         playButton.setBorderPainted(false);
         playButton.setFocusPainted(false);
         playButton.setContentAreaFilled(false);
-        playButton.setLocation(800, 500);
+        playButton.setLocation(900, 500);
         playButton.setVisible(false);
         playButton.addActionListener(e -> playMethod());
-        this.add(playButton);
+        thisPanel.add(playButton);
 
         gameOver = new JLabel();
         gameOver.setFont(new Font("DePixel", Font.BOLD, 48));
         gameOver.setSize(500, 70);
         gameOver.setLocation(600, 300);
         gameOver.setVisible(false);
-        this.add(gameOver);
+        thisPanel.add(gameOver);
 
         // COMFIGURATIONS NG ROCK PAPER AND SCISSORS for Player 1
         rockButton = new JButton();
-        this.add(rockButton);
+        thisPanel.add(rockButton);
 
         paperButton = new JButton();
-        this.add(paperButton);
+        thisPanel.add(paperButton);
 
         scissorButton = new JButton();
-        this.add(scissorButton);
+        thisPanel.add(scissorButton);
 
         KeyStroke rockKey = KeyStroke.getKeyStroke(KeyEvent.VK_A, 0);
         Action action1 = new AbstractAction() {
@@ -351,14 +339,14 @@ public class gamev2 extends JFrame implements ActionListener {
         p1Card.setIcon(new ImageIcon("default series\\backcard.png"));
         p1Card.setSize(240, 360);
         p1Card.setLocation(250, 280);
-        this.add(p1Card);
+        thisPanel.add(p1Card);
 
         // LABELS OF ROCK PAPER SCISORS BUT AS IMAGES FOR COMPUTER SIDE
         p2Card = new JLabel();
         p2Card.setIcon(new ImageIcon("default series\\backcard.png"));
         p2Card.setSize(240, 360);
         p2Card.setLocation(1000, 280);
-        this.add(p2Card);
+        thisPanel.add(p2Card);
 
         // RESIZE THE BG
         board = new ImageIcon(boards[randomIndex]);
@@ -371,7 +359,7 @@ public class gamev2 extends JFrame implements ActionListener {
         background.setIcon(board);
         background.setLocation(0, -143);
         background.setSize(1920, 1080);
-        this.add(background);
+        thisPanel.add(background);
 
         // TAS ILALAGAY SA JPANEL?!
         bg = new JPanel();
@@ -379,27 +367,31 @@ public class gamev2 extends JFrame implements ActionListener {
         bg.setLocation(0, 0);
         bg.add(background);
         bg.setLayout(null);
-        this.add(bg);
+        thisPanel.add(bg);
 
         // CONFIGURATION NG GUI
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("Ropersors");
         this.setLayout(null);
         this.setVisible(true);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setSize(1550, 830);
-        this.setResizable(false);
-        // this.setUndecorated(true);
-        ImageIcon icon = new ImageIcon("6793733.png");
-        this.setIconImage(icon.getImage());
     }
 
-    // NULLIFY THEIR CHOICES AND ELEMENTS
-    public void nullify() {
-        player1.setChoice(null);
-        player2.setChoice(null);
-        player1.setElement(null);
-        player2.setElement(null);
+    // PLAY THE SOUND IF THE FRAME IS VISIBLE
+    public void pleasePlay() {
+        gameMusic.playPvPMode();
+        thisPanel.setVisible(true);
+    }
+
+    public void homeButton() {
+        mainMenu haha = new mainMenu();
+        JPanel menuPanel = new JPanel();
+        menuPanel = new JPanel();
+        menuPanel.setSize(1550, 830);
+        menuPanel.setLayout(null);
+        menuPanel.add(haha);
+        this.add(menuPanel);
+        thisPanel.setVisible(false);
+
+        gameMusic.stopPvpMode();
     }
 
     // CHANGES THE BACKGROUND ALONG WITH THE NAMEPLATE
@@ -421,9 +413,8 @@ public class gamev2 extends JFrame implements ActionListener {
     // TRY AGAIN OR NEW GAME NA NAKALAGAY SA MAY PAUSE WINDOW
     public void tryAgain() {
         playMethod();
-        nullify();
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-        clip.setFramePosition(0);
+        homeButton.setVisible(false);
+        gameMusic.gameRestart2Normal();
         pauseButton.setVisible(true);
         player1.setLives(10);
         player2.setLives(10);
@@ -441,6 +432,7 @@ public class gamev2 extends JFrame implements ActionListener {
 
     // ISET NATIN YUNG SA PAUSE METHOD
     public void pauseMethod() {
+        homeButton.setVisible(true);
         pauseButton.setVisible(true);
         paused.setVisible(true);
         p1Card.setVisible(false);
@@ -456,6 +448,7 @@ public class gamev2 extends JFrame implements ActionListener {
 
     // ETO NAMAN YUNG SA PLAY
     public void playMethod() {
+        homeButton.setVisible(false);
         overlay.setVisible(false);
         pauseButton.setVisible(true);
         newGame.setVisible(false);
@@ -476,9 +469,6 @@ public class gamev2 extends JFrame implements ActionListener {
         p1Card.setIcon(new ImageIcon("default series\\backcard.png"));
         p2Card.setIcon(new ImageIcon("default series\\backcard.png"));
         roundNo = 1;
-        clip.start();
-        clip.setFramePosition(0);
-        panalo.stop();
         round.setText("Round No: " + roundNo);
         player1.setLives(10);
         player2.setLives(10);
@@ -490,7 +480,8 @@ public class gamev2 extends JFrame implements ActionListener {
         pauseButton.setVisible(true);
         p1lives.setText("Lives: " + Integer.toString(player1.getLives()));
         p2lives.setText("Lives: " + Integer.toString(player2.getLives()));
-
+        p1Won = false;
+        p2Won = false;
     }
 
     public void disableButtons() {
@@ -513,10 +504,6 @@ public class gamev2 extends JFrame implements ActionListener {
 
     public void gameIsOver() {
         disableButtons();
-        panalo.start();
-        panalo.loop(Clip.LOOP_CONTINUOUSLY);
-        panalo.setFramePosition(0);
-        clip.stop();
         overlay.setVisible(true);
         pauseButton.setVisible(false);
         gameOver.setVisible(true);
@@ -532,7 +519,7 @@ public class gamev2 extends JFrame implements ActionListener {
 
     }
 
-    public void computerLife1() {
+    public void p2Life1() {
         int livesp2 = player2.getLives() - 1;
         player2.setLives(livesp2);
         p2lives.setText("Lives: " + Integer.toString(player2.getLives()));
@@ -542,16 +529,14 @@ public class gamev2 extends JFrame implements ActionListener {
         int livesp1 = player1.getLives() - 2;
         player1.setLives(livesp1);
         p1lives.setText("Lives: " + Integer.toString(player1.getLives()));
-        absolute.setFramePosition(0);
-        absolute.start();
+        gameMusic.absoluteSound();
     }
 
-    public void computerLife2() {
+    public void p2Life2() {
         int livesp2 = player2.getLives() - 2;
         player2.setLives(livesp2);
         p2lives.setText("Lives: " + Integer.toString(player2.getLives()));
-        absolute.setFramePosition(0);
-        absolute.start();
+        gameMusic.absoluteSound();
     }
 
     public void check() {
@@ -654,11 +639,11 @@ public class gamev2 extends JFrame implements ActionListener {
             } else if (player2.getChoice().equals("rock") && player2.getElement().equals("leaf") ||
                     (player2.getChoice().equals("scissors") && player2.getElement().equals("fire")) ||
                     (player2.getChoice().equals("scissors") && player2.getElement().equals("water"))) {
-                computerLife1();
+                p2Life1();
             } else if (player2.getChoice().equals("paper") && player2.getElement().equals("water")) {
                 p1Life2();
             } else if (player2.getChoice().equals("scissors") && player2.getElement().equals("leaf")) {
-                computerLife2();
+                p2Life2();
             }
         }
         // PLAYER 1 ROCK AND WATER
@@ -670,11 +655,11 @@ public class gamev2 extends JFrame implements ActionListener {
             } else if ((player2.getChoice().equals("rock") && player2.getElement().equals("fire")) ||
                     (player2.getChoice().equals("scissors") && player2.getElement().equals("water")) ||
                     (player2.getChoice().equals("scissors") && player2.getElement().equals("leaf"))) {
-                computerLife1();
+                p2Life1();
             } else if (player2.getChoice().equals("paper") && player2.getElement().equals("leaf")) {
                 p1Life2();
             } else if (player2.getChoice().equals("scissors") && player2.getElement().equals("fire")) {
-                computerLife2();
+                p2Life2();
             }
         }
         // PLAYER 1 ROCK AND LEAF
@@ -686,11 +671,11 @@ public class gamev2 extends JFrame implements ActionListener {
             } else if ((player2.getChoice().equals("rock") && player2.getElement().equals("water")) ||
                     (player2.getChoice().equals("scissors") && player2.getElement().equals("fire")) ||
                     (player2.getChoice().equals("scissors") && player2.getElement().equals("leaf"))) {
-                computerLife1();
+                p2Life1();
             } else if (player2.getChoice().equals("paper") && player2.getElement().equals("fire")) {
                 p1Life2();
             } else if (player2.getChoice().equals("scissors") && player2.getElement().equals("water")) {
-                computerLife2();
+                p2Life2();
             }
         }
         // PLAYER 1 PAPER AND FIRE
@@ -702,11 +687,11 @@ public class gamev2 extends JFrame implements ActionListener {
             } else if ((player2.getChoice().equals("rock") && player2.getElement().equals("fire")) ||
                     (player2.getChoice().equals("rock") && player2.getElement().equals("water")) ||
                     (player2.getChoice().equals("paper") && player2.getElement().equals("leaf"))) {
-                computerLife1();
+                p2Life1();
             } else if (player2.getChoice().equals("scissors") && player2.getElement().equals("water")) {
                 p1Life2();
             } else if (player2.getChoice().equals("rock") && player2.getElement().equals("leaf")) {
-                computerLife2();
+                p2Life2();
             }
         }
         // PLAYER 1 PAPER AND WATER
@@ -718,11 +703,11 @@ public class gamev2 extends JFrame implements ActionListener {
             } else if ((player2.getChoice().equals("rock") && player2.getElement().equals("water")) ||
                     (player2.getChoice().equals("rock") && player2.getElement().equals("leaf")) ||
                     (player2.getChoice().equals("paper") && player2.getElement().equals("fire"))) {
-                computerLife1();
+                p2Life1();
             } else if (player2.getChoice().equals("scissors") && player2.getElement().equals("leaf")) {
                 p1Life2();
             } else if (player2.getChoice().equals("rock") && player2.getElement().equals("fire")) {
-                computerLife2();
+                p2Life2();
             }
         }
         // PLAYER 1 PAPER AND LEAF
@@ -734,11 +719,11 @@ public class gamev2 extends JFrame implements ActionListener {
             } else if ((player2.getChoice().equals("rock") && player2.getElement().equals("fire")) ||
                     (player2.getChoice().equals("rock") && player2.getElement().equals("leaf")) ||
                     (player2.getChoice().equals("paper") && player2.getElement().equals("water"))) {
-                computerLife1();
+                p2Life1();
             } else if (player2.getChoice().equals("scissors") && player2.getElement().equals("fire")) {
                 p1Life2();
             } else if (player2.getChoice().equals("rock") && player2.getElement().equals("water")) {
-                computerLife2();
+                p2Life2();
             }
         }
         // PLAYER 1 SCISSORS AND FIRE
@@ -750,11 +735,11 @@ public class gamev2 extends JFrame implements ActionListener {
             } else if ((player2.getChoice().equals("paper") && player2.getElement().equals("fire")) ||
                     (player2.getChoice().equals("paper") && player2.getElement().equals("water")) ||
                     (player2.getChoice().equals("scissors") && player2.getElement().equals("leaf"))) {
-                computerLife1();
+                p2Life1();
             } else if (player2.getChoice().equals("rock") && player2.getElement().equals("water")) {
                 p1Life2();
             } else if (player2.getChoice().equals("paper") && player2.getElement().equals("leaf")) {
-                computerLife2();
+                p2Life2();
             }
         }
         // PLAYER 1 SCISSORS AND WATER
@@ -766,11 +751,11 @@ public class gamev2 extends JFrame implements ActionListener {
             } else if ((player2.getChoice().equals("paper") && player2.getElement().equals("water")) ||
                     (player2.getChoice().equals("paper") && player2.getElement().equals("leaf")) ||
                     (player2.getChoice().equals("scissors") && player2.getElement().equals("fire"))) {
-                computerLife1();
+                p2Life1();
             } else if (player2.getChoice().equals("rock") && player2.getElement().equals("leaf")) {
                 p1Life2();
             } else if (player2.getChoice().equals("paper") && player2.getElement().equals("fire")) {
-                computerLife2();
+                p2Life2();
             }
         }
         // PLAYER 1 SCISSORS AND LEAF
@@ -782,21 +767,23 @@ public class gamev2 extends JFrame implements ActionListener {
             } else if ((player2.getChoice().equals("paper") && player2.getElement().equals("fire")) ||
                     (player2.getChoice().equals("paper") && player2.getElement().equals("leaf")) ||
                     (player2.getChoice().equals("scissors") && player2.getElement().equals("water"))) {
-                computerLife1();
+                p2Life1();
             } else if (player2.getChoice().equals("rock") && player2.getElement().equals("fire")) {
                 p1Life2();
             } else if (player2.getChoice().equals("paper") && player2.getElement().equals("water")) {
-                computerLife2();
+                p2Life2();
             }
         }
 
         if (player1.getLives() <= 0) {
             gameOver.setText("Game over!");
             p1lives.setText("Lives: 0");
+            p2Won = true;
             gameIsOver();
         } else if (player2.getLives() <= 0) {
             p2lives.setText("Lives: 0");
             gameOver.setText("You won");
+            p1Won = true;
             gameIsOver();
         } else if (player1.getLives() == 1 && player2.getLives() == 1) {
             round.setText("Final round");

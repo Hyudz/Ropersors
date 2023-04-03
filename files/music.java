@@ -8,72 +8,150 @@ import javax.sound.sampled.Clip;
 
 public class music {
 
-    Clip clip, panalo, natalo, absoluteDmg, mode1, mode2;
-    AudioInputStream sound;
+    public boolean playSound = false;
 
-    File file = new File("sounds\\lobby.wav");
+    Clip clip, panalo, natalo, absoluteDmg, mode1, mode2;
+    AudioInputStream sound, sound1;
+
+    File lobby = new File("Sound FX\\BG music\\HoliznaCC0-Level-3.wav");
     File victory = new File("sounds\\victory.WAV");
     File defeat = new File("sounds\\defeat.wav");
     File crit = new File("sounds\\crit.WAV");
-    File pvpMode = new File("sounds\\pvp.WAV");
-    File pveMode = new File("sounds\\pve.WAV");
+    File pvpMode = new File("Sound FX\\BG music\\HoliznaCC0-Level-1.wav");
+    File pveMode = new File("Sound FX\\BG music\\HoliznaCC0-Level-2.wav");
 
-    public music() {
+    public void playLobby() {
         try {
+            sound = AudioSystem.getAudioInputStream(lobby);
             clip = AudioSystem.getClip();
-            panalo = AudioSystem.getClip();
-            natalo = AudioSystem.getClip();
-            absoluteDmg = AudioSystem.getClip();
-            mode1 = AudioSystem.getClip();
-            mode2 = AudioSystem.getClip();
+            clip.setFramePosition(0);
+            clip.open(sound);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        clip.start();
     }
 
-    public void playMusic() {
+    public void stopLobby() {
+        clip.stop();
+    }
+
+    public void playPvEMode() {
+
         try {
-            sound = AudioSystem.getAudioInputStream(file);
-            clip.open(sound);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-
-            sound = AudioSystem.getAudioInputStream(defeat);
-            natalo = AudioSystem.getClip();
-            natalo.open(sound);
-
-            sound = AudioSystem.getAudioInputStream(crit);
-            absoluteDmg = AudioSystem.getClip();
-            absoluteDmg.open(sound);
-
-            sound = AudioSystem.getAudioInputStream(pvpMode);
+            sound1 = AudioSystem.getAudioInputStream(pveMode);
             mode1 = AudioSystem.getClip();
-            mode1.open(sound);
+            mode1.setFramePosition(0);
+            mode1.open(sound1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            sound = AudioSystem.getAudioInputStream(pveMode);
+        mode1.start();
+        mode1.loop(Clip.LOOP_CONTINUOUSLY);
+
+    }
+
+    public void gameRestart1Lost() {
+        natalo.stop();
+        mode1.setFramePosition(0);
+        mode1.start();
+    }
+
+    public void gameRestart1Won() {
+        panalo.stop();
+        mode1.setFramePosition(0);
+        mode1.start();
+    }
+
+    public void gameRestart1Normal() {
+        mode1.setFramePosition(0);
+    }
+
+    public void stopPveMode() {
+        mode1.stop();
+    }
+
+    public void playPvPMode() {
+        try {
+            AudioInputStream sound = AudioSystem.getAudioInputStream(pvpMode);
             mode2 = AudioSystem.getClip();
             mode2.open(sound);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        mode2.setFramePosition(0);
+        mode2.start();
+        mode2.loop(Clip.LOOP_CONTINUOUSLY);
+
     }
 
-    public void playPvPMode() {
-        try {
-            clip.stop();
-            sound = AudioSystem.getAudioInputStream(pveMode);
-            panalo.open(sound);
-            panalo.start();
-        } catch (Exception e) {
+    public void gameRestart2Lost() {
+        natalo.stop();
+        mode2.setFramePosition(0);
+        mode2.start();
+    }
 
+    public void gameRestart2Won() {
+        panalo.stop();
+        mode2.setFramePosition(0);
+        mode2.start();
+    }
+
+    public void gameRestart2Normal() {
+        mode2.setFramePosition(0);
+    }
+
+    public void stopPvpMode() {
+        mode2.stop();
+    }
+
+    public void absoluteSound() {
+        try {
+            AudioInputStream sound = AudioSystem.getAudioInputStream(crit);
+            absoluteDmg = AudioSystem.getClip();
+            absoluteDmg.open(sound);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        absoluteDmg.setFramePosition(0);
+        absoluteDmg.start();
     }
 
-    public void playPvEMode() {
-        clip.stop();
-        mode2.setFramePosition(0);
-        mode2.loop(Clip.LOOP_CONTINUOUSLY);
-        mode2.start();
+    public void winner() {
+        try {
+            AudioInputStream sound = AudioSystem.getAudioInputStream(victory);
+            panalo = AudioSystem.getClip();
+            panalo.open(sound);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        mode1.stop();
+        // mode2.stop();
+        panalo.setFramePosition(0);
+        panalo.loop(Clip.LOOP_CONTINUOUSLY);
+        panalo.start();
     }
+
+    public void looser() {
+        try {
+            AudioInputStream sound = AudioSystem.getAudioInputStream(defeat);
+            natalo = AudioSystem.getClip();
+            natalo.open(sound);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mode1.stop();
+        // mode2.stop();
+        natalo.setFramePosition(0);
+        natalo.loop(Clip.LOOP_CONTINUOUSLY);
+        natalo.start();
+    }
+
 }
