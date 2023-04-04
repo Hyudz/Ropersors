@@ -1,6 +1,5 @@
 package files;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Font;
@@ -16,7 +15,7 @@ public class mainMenu extends JPanel implements ActionListener {
     int height;
     Clip clip, pveSound;
 
-    JButton PVP, PVE, exit;
+    JButton PVP, PVE, help, exit;
     JPanel lobbyPanel, mode1Panel, mode2Panel;
 
     music gameMusic = new music();
@@ -75,10 +74,18 @@ public class mainMenu extends JPanel implements ActionListener {
         PVP.addActionListener(this);
         lobbyPanel.add(PVP);
 
+        help = new JButton();
+        help.setText("Instructions");
+        help.setSize(200, 25);
+        help.setLocation(690, 400);
+        // help.addActionListener(this);
+        help.setFocusable(false);
+        lobbyPanel.add(help);
+
         exit = new JButton();
         exit.setText("Exit to desktop");
         exit.setSize(200, 25);
-        exit.setLocation(690, 400);
+        exit.setLocation(690, 450);
         exit.addActionListener(this);
         exit.setFocusable(false);
         lobbyPanel.add(exit);
@@ -109,7 +116,6 @@ public class mainMenu extends JPanel implements ActionListener {
         height = this.getHeight();
         this.setSize(1550, 830);
         // this.setUndecorated(true);
-        ImageIcon icon = new ImageIcon("6793733.png");
 
     }
 
@@ -141,7 +147,7 @@ public class mainMenu extends JPanel implements ActionListener {
                 PVP.setVisible(false);
                 exit.setVisible(false);
             } else if (e.getSource() == exit) {
-
+                System.exit(0);
             }
         } catch (Exception exception) {
             exception.printStackTrace();

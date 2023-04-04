@@ -16,7 +16,7 @@ import java.util.TimerTask;
 public class gamev2 extends JPanel implements ActionListener {
 
     JLabel p1lives, p2lives, status, name1, name2, p1Card, p2Card, paused, overlay, background,
-            gameOver, nameplate, nameplate2, round, p1Status, p2Status;
+            gameOver, nameplate, nameplate2, round, p1Status, p2Status, timer;
     JPanel bg, names1, names2, thisPanel;
     ImageIcon board, namplates;
     Random randomChoice;
@@ -37,6 +37,8 @@ public class gamev2 extends JPanel implements ActionListener {
     boolean p1Choosed, p2Choosed;
     boolean p1Won, p2Won = false;
 
+    int secs = 30;
+
     public gamev2() {
 
         thisPanel = new JPanel();
@@ -45,6 +47,13 @@ public class gamev2 extends JPanel implements ActionListener {
         thisPanel.setVisible(true);
         thisPanel.setLayout(null);
         this.add(thisPanel);
+
+        timer = new JLabel();
+        timer.setSize(100, 25);
+        timer.setForeground(Color.red);
+        timer.setText(Integer.toString(secs));
+        timer.setLocation(10, 10);
+        thisPanel.add(timer);
 
         roundNo = 1;
 
@@ -245,7 +254,7 @@ public class gamev2 extends JPanel implements ActionListener {
             }
         };
 
-        InputMap input1 = rockButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        InputMap input1 = rockButton.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         input1.put(rockKey, "performAction1");
         ActionMap actionMap1 = rockButton.getActionMap();
         actionMap1.put("performAction1", action1);
@@ -260,7 +269,7 @@ public class gamev2 extends JPanel implements ActionListener {
             }
         };
 
-        InputMap input2 = rockButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        InputMap input2 = rockButton.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         input2.put(paperKey, "performAction2");
         ActionMap actionMap2 = rockButton.getActionMap();
         actionMap2.put("performAction2", action2);
@@ -285,7 +294,7 @@ public class gamev2 extends JPanel implements ActionListener {
         scissorsButton1 = new JButton();
         this.add(scissorsButton1);
 
-        InputMap input3 = rockButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        InputMap input3 = rockButton.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         input3.put(scissorKey, "performAction3");
         ActionMap actionMap3 = rockButton.getActionMap();
         actionMap3.put("performAction3", action3);
@@ -300,7 +309,7 @@ public class gamev2 extends JPanel implements ActionListener {
             }
         };
 
-        InputMap input4 = rockButton1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        InputMap input4 = rockButton1.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         input4.put(rockKey1, "performAction4");
         ActionMap actionMap4 = rockButton1.getActionMap();
         actionMap4.put("performAction4", action4);
@@ -315,7 +324,7 @@ public class gamev2 extends JPanel implements ActionListener {
             }
         };
 
-        InputMap input5 = paperButton1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        InputMap input5 = paperButton1.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         input5.put(paperKey1, "performAction5");
         ActionMap actionMap5 = paperButton1.getActionMap();
         actionMap5.put("performAction5", action5);
@@ -330,7 +339,7 @@ public class gamev2 extends JPanel implements ActionListener {
             }
         };
 
-        InputMap input6 = scissorsButton1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        InputMap input6 = scissorsButton1.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         input6.put(scissorsKey1, "performAction6");
         ActionMap actionMap6 = scissorsButton1.getActionMap();
         actionMap6.put("performAction6", action6);
@@ -413,6 +422,7 @@ public class gamev2 extends JPanel implements ActionListener {
     // TRY AGAIN OR NEW GAME NA NAKALAGAY SA MAY PAUSE WINDOW
     public void tryAgain() {
         playMethod();
+        gameMusic.gameRestart2Normal();
         homeButton.setVisible(false);
         gameMusic.gameRestart2Normal();
         pauseButton.setVisible(true);
@@ -466,6 +476,10 @@ public class gamev2 extends JPanel implements ActionListener {
     // MATALO
     public void retry(ActionEvent e) {
         enableButtons();
+        p1Choosed = false;
+        p2Choosed = false;
+        p1Status.setVisible(true);
+        p2Status.setVisible(true);
         p1Card.setIcon(new ImageIcon("default series\\backcard.png"));
         p2Card.setIcon(new ImageIcon("default series\\backcard.png"));
         roundNo = 1;

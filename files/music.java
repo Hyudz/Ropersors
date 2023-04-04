@@ -13,12 +13,14 @@ public class music {
     Clip clip, panalo, natalo, absoluteDmg, mode1, mode2;
     AudioInputStream sound, sound1;
 
-    File lobby = new File("Sound FX\\BG music\\HoliznaCC0-Level-3.wav");
-    File victory = new File("sounds\\victory.WAV");
-    File defeat = new File("sounds\\defeat.wav");
-    File crit = new File("sounds\\crit.WAV");
-    File pvpMode = new File("Sound FX\\BG music\\HoliznaCC0-Level-1.wav");
-    File pveMode = new File("Sound FX\\BG music\\HoliznaCC0-Level-2.wav");
+    File lobby = new File("Sound FX\\BG music\\Eggy-Toast-Crater.wav");
+    File victory = new File("Sound FX\\other sound fx\\kl-peach-game-over-iii-142453.wav");
+    File defeat = new File("Sound FX\\other sound fx\\dead-8bit-41400.wav");
+    File crit = new File("Sound FX\\other sound fx\\playerhit-43108.wav");
+    File bg1 = new File("Sound FX\\BG music\\HoliznaCC0-Level-1.wav");
+    File bg2 = new File("Sound FX\\BG music\\HoliznaCC0-Level-2.wav");
+    File bg3 = new File("Sound FX\\BG music\\HoliznaCC0-Level-3.wav");
+    File bg4 = new File("Sound FX\\BG music\\Eggy-Toast-Pressure.wav");
 
     public void playLobby() {
         try {
@@ -41,7 +43,7 @@ public class music {
     public void playPvEMode() {
 
         try {
-            sound1 = AudioSystem.getAudioInputStream(pveMode);
+            sound1 = AudioSystem.getAudioInputStream(bg1);
             mode1 = AudioSystem.getClip();
             mode1.setFramePosition(0);
             mode1.open(sound1);
@@ -76,7 +78,7 @@ public class music {
 
     public void playPvPMode() {
         try {
-            AudioInputStream sound = AudioSystem.getAudioInputStream(pvpMode);
+            AudioInputStream sound = AudioSystem.getAudioInputStream(bg1);
             mode2 = AudioSystem.getClip();
             mode2.open(sound);
         } catch (Exception e) {

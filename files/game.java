@@ -25,7 +25,7 @@ public class game extends JPanel implements ActionListener {
     String[] nameplates = { "nameplates\\magam.png", "nameplates\\sky.png", "nameplates\\snad.png",
             "nameplates\\wood.png" };
     Random randomBg;
-    int randomIndex, computerCard, roundNo;
+    int randomIndex, computerCard, roundNo, randomMusic;
     Image boardImage, boardResized;
     players player1 = new players();
     players computer = new players();
@@ -281,6 +281,7 @@ public class game extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         randomBg = new Random();
         randomIndex = randomBg.nextInt(4);
+        randomMusic = randomIndex;
         nameplate.setIcon(new ImageIcon(nameplates[randomIndex]));
         nameplate2.setIcon(new ImageIcon(nameplates[randomIndex]));
         board = new ImageIcon(boards[randomIndex]);
@@ -432,6 +433,14 @@ public class game extends JPanel implements ActionListener {
     public void proceed() {
         randomChoice = new Random();
 
+        // DISABLE THE BUTTONS TO AVOID SPAMMING
+        rockButton.setEnabled(false);
+        scissorButton.setEnabled(false);
+        paperButton.setEnabled(false);
+        rockButton.setDisabledIcon(new ImageIcon("default series\\default rock card.png"));
+        paperButton.setDisabledIcon(new ImageIcon("default series\\default paper card.png"));
+        scissorButton.setDisabledIcon(new ImageIcon("default series\\default scissors card.png"));
+
         // RANDOMIZER FOR COMPUTER TO SELECT WHAT OBJECT
         int computerChoice = randomChoice.nextInt(3);
         computer.setChoice(objects[computerChoice]);
@@ -483,28 +492,28 @@ public class game extends JPanel implements ActionListener {
         // INFUSAL OF ELEMENTS FOR PLAYER
         if (player1.getChoice().equals("rock")) {
             if (player1.getElement().equals("fire")) {
-                rockButton.setIcon(new ImageIcon("Fire Series\\fire rock card (2).png"));
+                rockButton.setDisabledIcon(new ImageIcon("Fire Series\\fire rock card (2).png"));
             } else if (player1.getElement().equals("water")) {
-                rockButton.setIcon(new ImageIcon("Water Series\\water rock card.png"));
+                rockButton.setDisabledIcon(new ImageIcon("Water Series\\water rock card.png"));
             } else if (player1.getElement().equals("leaf")) {
-                rockButton.setIcon(new ImageIcon("Leaf Series\\leaf rock card (1).png"));
+                rockButton.setDisabledIcon(new ImageIcon("Leaf Series\\leaf rock card (1).png"));
             }
 
         } else if (player1.getChoice().equals("paper")) {
             if (randomElement == 0) {
-                paperButton.setIcon(new ImageIcon("Fire Series\\fire paper card (2).png"));
+                paperButton.setDisabledIcon(new ImageIcon("Fire Series\\fire paper card (2).png"));
             } else if (player1.getElement().equals("water")) {
-                paperButton.setIcon(new ImageIcon("Water Series\\water paper card.png"));
+                paperButton.setDisabledIcon(new ImageIcon("Water Series\\water paper card.png"));
             } else if (player1.getElement().equals("leaf")) {
-                paperButton.setIcon(new ImageIcon("Leaf Series\\leaf paper card (1).png"));
+                paperButton.setDisabledIcon(new ImageIcon("Leaf Series\\leaf paper card (1).png"));
             }
         } else if (player1.getChoice().equals("scissors")) {
             if (randomElement == 0) {
-                scissorButton.setIcon(new ImageIcon("Fire Series\\fire scissors card (2).png"));
+                scissorButton.setDisabledIcon(new ImageIcon("Fire Series\\fire scissors card (2).png"));
             } else if (player1.getElement().equals("water")) {
-                scissorButton.setIcon(new ImageIcon("Water Series\\water scissors card.png"));
+                scissorButton.setDisabledIcon(new ImageIcon("Water Series\\water scissors card.png"));
             } else if (player1.getElement().equals("leaf")) {
-                scissorButton.setIcon(new ImageIcon("Leaf Series\\leaf scissors card (1).png"));
+                scissorButton.setDisabledIcon(new ImageIcon("Leaf Series\\leaf scissors card (1).png"));
             }
         }
 
@@ -515,6 +524,10 @@ public class game extends JPanel implements ActionListener {
                 paperButton.setIcon(new ImageIcon("default series\\default paper card.png"));
                 scissorButton.setIcon(new ImageIcon("default series\\default scissors card.png"));
                 unknownCard.setIcon(new ImageIcon("default series\\backcard.png"));
+
+                rockButton.setEnabled(true);
+                scissorButton.setEnabled(true);
+                paperButton.setEnabled(true);
             }
         };
         timer.schedule(task, 2000);
