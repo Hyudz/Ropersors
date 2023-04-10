@@ -2,6 +2,8 @@ package files;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -16,13 +18,28 @@ public class mainMenu extends JPanel implements ActionListener {
     Clip clip, pveSound;
 
     JButton PVP, PVE, help, exit;
-    JPanel lobbyPanel, mode1Panel, mode2Panel;
+    JPanel lobbyPanel, mode1Panel, mode2Panel, clickPanel, instructionPanel, exitPanel;
 
     music gameMusic = new music();
     game mode1Game = new game();
     gamev2 mode2Game = new gamev2();
 
     mainMenu() {
+
+        // CONTAINS THE CLICK ANYWHERE SCREEN
+        clickPanel = new JPanel(new BorderLayout());
+        clickPanel.setSize(1550, 830);
+        this.add(clickPanel);
+
+        JButton clickAnywhere = new JButton();
+        ImageIcon titleIcon = new ImageIcon("titlescreen.png");
+        Image tittleIcon = titleIcon.getImage();
+        Image titleIconResized = tittleIcon.getScaledInstance(1550, 830, Image.SCALE_SMOOTH);
+        titleIcon = new ImageIcon(titleIconResized);
+
+        clickAnywhere.setIcon(titleIcon);
+        clickAnywhere.addActionListener(e -> panels());
+        clickPanel.add(clickAnywhere);
 
         // LOBBY PANEL CONTAINS THE TITLE AND THE SUBTITLE AS FOR NOW
         lobbyPanel = new JPanel();
@@ -44,53 +61,101 @@ public class mainMenu extends JPanel implements ActionListener {
         mode2Panel.setVisible(false);
         this.add(mode2Panel);
 
-        JLabel title = new JLabel("Ropersors");
-        title.setFont(new Font("8-bit Arcade In", Font.PLAIN, 150));
-        title.setSize(800, 150);
-        title.setLocation(450, 50);
-        // title.setForeground(Color.white);
-        lobbyPanel.add(title);
+        // ETO YUNG PANEL PARA SA INSTRUCTIONS
+        instructionPanel = new JPanel();
+        instructionPanel.setSize(989, 556);
+        instructionPanel.setLayout(null);
 
-        JLabel subtitle = new JLabel("a Rock Paper Scissors Game");
-        subtitle.setFont(new Font("8-bit Arcade In", Font.PLAIN, 40));
-        // subtitle.setForeground(Color.white);
-        subtitle.setSize(800, 150);
-        subtitle.setLocation(500, 100);
-        lobbyPanel.add(subtitle);
+        // YUNG CLOSE BUTTON NG INSTRUCTION
+        JButton closeButton = new JButton(new ImageIcon("main menu stuff\\buttons\\close button.png"));
+        closeButton.setSize(26, 26);
+        closeButton.setLocation(944, 10);
+        closeButton.setContentAreaFilled(false);
+        closeButton.setBorderPainted(false);
+        closeButton.addActionListener(e -> close());
+        instructionPanel.add(closeButton);
 
-        PVE = new JButton();
-        PVE.setText("Player Versus Computer");
-        PVE.setSize(200, 25);
-        PVE.setLocation(690, 300);
-        PVE.setFocusable(false);
+        // ETO YUNG INSTRUCTION
+        JLabel instructionsLabel = new JLabel(
+                new ImageIcon("main menu stuff\\pngs and text\\how to play screen (with close button).png"));
+        instructionsLabel.setSize(989, 556);
+        instructionPanel.add(instructionsLabel);
+        instructionPanel.setVisible(false);
+        instructionPanel.setOpaque(false);
+        instructionPanel.setLocation(300, 100);
+        lobbyPanel.add(instructionPanel);
+
+        // ETO NAMAN PARA PAG MAG EXIT YUNG USER
+        exitPanel = new JPanel();
+        exitPanel.setLayout(null);
+
+        // ETO NAMAN YUNG PARA MAG EXIT NA YUNG PROGRAM
+        JButton exitt = new JButton(new ImageIcon("main menu stuff\\buttons\\exit confirmed.png"));
+        exitt.setSize(46, 31);
+        exitt.setLocation(75, 135);
+        exitt.setBorderPainted(false);
+        exitt.setContentAreaFilled(false);
+        exitt.addActionListener(e -> System.exit(0));
+        exitPanel.add(exitt);
+
+        // ETO NAMAN PARA I-CLOSE YUNG EXIT PANEL
+        JButton cancel = new JButton(new ImageIcon("main menu stuff\\buttons\\cancel confirm.png"));
+        cancel.setSize(75, 31);
+        cancel.setLocation(250, 135);
+        cancel.setBorderPainted(false);
+        cancel.setContentAreaFilled(false);
+        cancel.addActionListener(e -> cancelled());
+        exitPanel.add(cancel);
+
+        // POP-UP NA TO CONFIRM NA I-EXIT
+        JLabel exitLabel = new JLabel(new ImageIcon("main menu stuff\\pngs and text\\confirm exit.png"));
+        exitLabel.setSize(426, 200);
+        exitPanel.add(exitLabel);
+        exitPanel.setSize(426, 200);
+        exitPanel.setOpaque(false);
+        exitPanel.setVisible(false);
+        exitPanel.setLocation(500, 300);
+
+        lobbyPanel.add(exitPanel);
+
+        // SELECT MODE TEXT NA NASA TAAS
+        JLabel selectMode = new JLabel(new ImageIcon("main menu stuff\\pngs and text\\select game mode (text).png"));
+        selectMode.setSize(684, 104);
+        lobbyPanel.add(selectMode);
+
+        PVE = new JButton(new ImageIcon("main menu stuff\\buttons\\pvai card.png"));
+        PVE.setSize(240, 360);
+        PVE.setLocation(900, 200);
+        PVE.setContentAreaFilled(false);
+        PVE.setBorderPainted(false);
         PVE.addActionListener(this);
         lobbyPanel.add(PVE);
 
-        PVP = new JButton();
-        PVP.setText("Player Versus Player");
-        PVP.setSize(200, 25);
-        PVP.setLocation(690, 350);
-        PVP.setFocusable(false);
+        PVP = new JButton(new ImageIcon("main menu stuff\\buttons\\pvp card.png"));
+        PVP.setSize(240, 360);
+        PVP.setLocation(400, 200);
+        PVP.setContentAreaFilled(false);
+        PVP.setBorderPainted(false);
         PVP.addActionListener(this);
         lobbyPanel.add(PVP);
 
-        help = new JButton();
-        help.setText("Instructions");
-        help.setSize(200, 25);
-        help.setLocation(690, 400);
-        // help.addActionListener(this);
-        help.setFocusable(false);
+        help = new JButton(new ImageIcon("main menu stuff\\buttons\\user-guide button.png"));
+        help.setSize(64, 70);
+        help.setLocation(1460, 20);
+        help.addActionListener(e -> instruct());
+        help.setContentAreaFilled(false);
+        help.setBorderPainted(false);
         lobbyPanel.add(help);
 
-        exit = new JButton();
-        exit.setText("Exit to desktop");
-        exit.setSize(200, 25);
-        exit.setLocation(690, 450);
+        exit = new JButton(new ImageIcon("main menu stuff\\buttons\\exit button.png"));
+        exit.setSize(64, 70);
+        exit.setLocation(1460, 690);
         exit.addActionListener(this);
-        exit.setFocusable(false);
+        exit.setContentAreaFilled(false);
+        exit.setBorderPainted(false);
         lobbyPanel.add(exit);
 
-        ImageIcon background = new ImageIcon("main menu.png");
+        ImageIcon background = new ImageIcon("main menu stuff\\main menu bg.png");
         Image backkground = background.getImage();
         Image bgResized = backkground.getScaledInstance(1535, 792, java.awt.Image.SCALE_SMOOTH);
         background = new ImageIcon(bgResized);
@@ -112,8 +177,6 @@ public class mainMenu extends JPanel implements ActionListener {
         // CONFIGURATION NG GUI
         this.setLayout(null);
         this.setVisible(true);
-        width = this.getWidth();
-        height = this.getHeight();
         this.setSize(1550, 830);
         // this.setUndecorated(true);
 
@@ -123,12 +186,41 @@ public class mainMenu extends JPanel implements ActionListener {
         mainMenu welcome = new mainMenu();
     }
 
+    public void panels() {
+        clickPanel.setVisible(false);
+        lobbyPanel.setVisible(true);
+    }
+
+    public void instruct() {
+        instructionPanel.setVisible(true);
+        PVP.setEnabled(false);
+        PVE.setEnabled(false);
+        exit.setEnabled(false);
+
+        PVP.setDisabledIcon(new ImageIcon("main menu stuff\\buttons\\pvp card.png"));
+        PVE.setDisabledIcon(new ImageIcon("main menu stuff\\buttons\\pvai card.png"));
+        exit.setDisabledIcon(new ImageIcon("main menu stuff\\buttons\\exit button.png"));
+    }
+
+    public void close() {
+        instructionPanel.setVisible(false);
+        PVP.setEnabled(true);
+        PVE.setEnabled(true);
+        exit.setEnabled(true);
+    }
+
+    public void cancelled() {
+        exitPanel.setVisible(false);
+        PVP.setEnabled(true);
+        PVE.setEnabled(true);
+        help.setEnabled(true);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        gameMusic.stopLobby();
         try {
             if (e.getSource() == PVP) {
-
+                gameMusic.stopLobby();
                 lobbyPanel.setVisible(false);
                 mode2Panel.setVisible(true);
 
@@ -138,7 +230,7 @@ public class mainMenu extends JPanel implements ActionListener {
                 exit.setVisible(false);
 
             } else if (e.getSource() == PVE) {
-
+                gameMusic.stopLobby();
                 lobbyPanel.setVisible(false);
                 mode1Panel.setVisible(true);
 
@@ -147,7 +239,15 @@ public class mainMenu extends JPanel implements ActionListener {
                 PVP.setVisible(false);
                 exit.setVisible(false);
             } else if (e.getSource() == exit) {
-                System.exit(0);
+                PVP.setEnabled(false);
+                help.setEnabled(false);
+                PVE.setEnabled(false);
+
+                PVP.setDisabledIcon(new ImageIcon("main menu stuff\\buttons\\pvp card.png"));
+                PVE.setDisabledIcon(new ImageIcon("main menu stuff\\buttons\\pvai card.png"));
+                help.setDisabledIcon(new ImageIcon("main menu stuff\\buttons\\user-guide button.png"));
+
+                exitPanel.setVisible(true);
             }
         } catch (Exception exception) {
             exception.printStackTrace();
