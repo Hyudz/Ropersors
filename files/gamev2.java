@@ -85,7 +85,6 @@ public class gamev2 extends JPanel implements ActionListener {
         p1lives.setFont(new Font("DePixel", Font.BOLD, 18));
         p1lives.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         p1lives.setForeground(Color.white);
-        p1lives.setLocation(315, 120);
 
         p2lives = new JLabel();
         p2lives.setText("Lives: " + player2.getLives());
@@ -271,15 +270,6 @@ public class gamev2 extends JPanel implements ActionListener {
         playButton.addActionListener(e -> playMethod());
         gPaused.add(playButton);
 
-        // SET THE HOME BUTTON
-        homeButton = new JButton(new ImageIcon("game paused stuff\\main menu.png"));
-        homeButton.setSize(324, 75);
-        homeButton.setLocation(0, 265);
-        homeButton.setBorderPainted(false);
-        homeButton.setContentAreaFilled(false);
-        homeButton.addActionListener(e -> confirm());
-        gPaused.add(homeButton);
-
         // NEW GAME BUTTON NA NASA PAUSE PANEL
         newGame = new JButton(new ImageIcon("game paused stuff\\restart.png"));
         newGame.setSize(211, 75);
@@ -311,7 +301,10 @@ public class gamev2 extends JPanel implements ActionListener {
         scissorButton = new JButton();
         thisPanel.add(scissorButton);
 
+        // CREATE A KEYSTROKE NAMED ROCK KEY AND BIND "A" KEY WITH IT
         KeyStroke rockKey = KeyStroke.getKeyStroke(KeyEvent.VK_A, 0);
+
+        // CREATE AN ACTION NA MAGAGAWA PAG NA-TRIGGER YUNG KEYSTROKE
         Action action1 = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -321,9 +314,22 @@ public class gamev2 extends JPanel implements ActionListener {
             }
         };
 
+        // CREATE AN INPUTMAP NAMED INPUT 1 TAS I-BIND DIN SIYA SA ROCK BUTTON AND MAG
+        // WOWORK LANG SIYA PAG VISIBLE YUNG PANEL? OR BUTTON IDK
         InputMap input1 = rockButton.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
+
+        // YUNG INPUT 1 IBA-BIND NIYA YUNG KEYSTROKE "A" THEN YUNG "PERFORM ACTION 1"
+        // NAMAN IS FOR ACTION MAP WHICH IS CALLED "STRING
+        // IDENTIFIER"
         input1.put(rockKey, "performAction1");
+
+        // So sa action map naman kinukuha niya yung action map ni rock button?
         ActionMap actionMap1 = rockButton.getActionMap();
+
+        // so yon iba-bind na ni "action map 1" yung "perfrom action 1" which is yung
+        // rock
+        // key ("A") and rock button and lastly yung action 1 which is yung mangyayaring
+        // action pag na trigger yung button.
         actionMap1.put("performAction1", action1);
 
         KeyStroke paperKey = KeyStroke.getKeyStroke(KeyEvent.VK_S, 0);
@@ -481,6 +487,7 @@ public class gamev2 extends JPanel implements ActionListener {
 
     // PLAY THE SOUND IF THE FRAME IS VISIBLE
     public void pleasePlay() {
+        // eto yung sa music pag kung ano yung index na nakuha
         switch (randomIndex) {
             case 0:
                 gameMusic.playGame1();
@@ -498,6 +505,7 @@ public class gamev2 extends JPanel implements ActionListener {
         thisPanel.setVisible(true);
     }
 
+    // ETO YATA YUNG CONFIRMATION EXIT
     public void confirm() {
         exitPanel.setVisible(true);
         playButton.setEnabled(false);
@@ -511,6 +519,7 @@ public class gamev2 extends JPanel implements ActionListener {
         homeButton.setDisabledIcon(new ImageIcon("game paused stuff\\main menu.png"));
     }
 
+    // ETO YUNG MANGYAYARI PAG KINANCEL YUNG EXIT CONFIRMATION
     public void cancel() {
         retryButton.setEnabled(true);
         exitPanel.setVisible(false);
@@ -519,14 +528,20 @@ public class gamev2 extends JPanel implements ActionListener {
         homeButton.setEnabled(true);
     }
 
+    // ETO NAMAN PARA SA HOME BUTTON SYEMPRE
     public void homeButton() {
+        // CREATING AN OBJECT NA MAIN MENU
         mainMenu haha = new mainMenu();
+
+        // CREATING A JPANEL TAS DITO ILALAGAY YUNG MAIN MENU
         JPanel menuPanel = new JPanel();
         menuPanel = new JPanel();
         menuPanel.setSize(1550, 830);
         menuPanel.setLayout(null);
         menuPanel.add(haha);
         this.add(menuPanel);
+
+        // STOPS THE MUSIC
         thisPanel.setVisible(false);
         lastNum = recentIndex.get(recentIndex.size() - 1);
 
@@ -546,7 +561,7 @@ public class gamev2 extends JPanel implements ActionListener {
         }
     }
 
-    // CHANGES THE BACKGROUND ALONG WITH THE NAMEPLATE
+    // CHANGES THE BACKGROUND ALONG WITH THE NAMEPLATE PATI NA DIN YUNG MUSIC
     @Override
     public void actionPerformed(ActionEvent e) {
         lastNum = recentIndex.get(recentIndex.size() - 1);
@@ -689,6 +704,7 @@ public class gamev2 extends JPanel implements ActionListener {
         p2Won = false;
     }
 
+    // THIS IS TO DISABLE BUTTONS TO AVOID SPAMMING
     public void disableButtons() {
         rockButton.setEnabled(false);
         paperButton.setEnabled(false);
@@ -698,6 +714,7 @@ public class gamev2 extends JPanel implements ActionListener {
         scissorsButton1.setEnabled(false);
     }
 
+    // THIS IS TO ENABLE BUTTONS PARA MAKAPAG PICK ULIT SILA
     public void enableButtons() {
         rockButton.setEnabled(true);
         paperButton.setEnabled(true);
@@ -712,7 +729,6 @@ public class gamev2 extends JPanel implements ActionListener {
         overlay.setVisible(true);
         pauseButton.setVisible(false);
         gameOverPanel.setVisible(true);
-
     }
 
     // LAGAY NALANG NATIN SA MGA METHODS YUNG MABABAWASAN YUNG LIFE
@@ -810,6 +826,7 @@ public class gamev2 extends JPanel implements ActionListener {
 
     }
 
+    // CHECKS IF NAKAPAG INPUT NA ANG BOTH SIDES
     public void check() {
         if (p1Choosed == true && p2Choosed == true) {
             proceed();
@@ -820,10 +837,13 @@ public class gamev2 extends JPanel implements ActionListener {
         }
     }
 
+    // ETO NA YUNG MAHABANG PROCESS
     public void proceed() {
         p1Status.setVisible(false);
         p2Status.setVisible(false);
+
         randomChoice = new Random();
+
         Random randomChoiceofElement = new Random();
         int randomInfuse = randomChoiceofElement.nextInt(3);
 
@@ -1125,7 +1145,6 @@ public class gamev2 extends JPanel implements ActionListener {
             gameIsOver();
         } else if (player1.getLives() == 1 && player2.getLives() == 1) {
             round.setText("Final round");
-
             timer.schedule(task, 2500);
 
         } else {
