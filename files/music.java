@@ -1,7 +1,6 @@
 package files;
 
 import java.io.File;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -14,10 +13,9 @@ public class music {
     AudioInputStream sound, sound1, sound2, sound3, sound4;
 
     File lobby = new File("Sound FX\\BG music\\lobby.wav");
-    File victory = new File("Sound FX\\other sound fx\\kl-peach-game-over-iii-142453.wav");
+    File victory = new File("Sound FX\\other sound fx\\win4.wav");
     File defeat = new File("Sound FX\\other sound fx\\dead-8bit-41400.wav");
     File crit = new File("Sound FX\\other sound fx\\playerhit-43108.wav");
-
     File bg1 = new File("Sound FX\\BG music\\magma.wav");
     File bg2 = new File("Sound FX\\BG music\\sky.wav");
     File bg3 = new File("Sound FX\\BG music\\sand.wav");

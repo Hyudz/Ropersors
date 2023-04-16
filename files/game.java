@@ -277,24 +277,24 @@ public class game extends JPanel implements ActionListener {
 
         paperButton = new JButton();
         paperButton.setSize(240, 360);
-        paperButton.setLocation(330, 200);
+        paperButton.setLocation(335, 200);
         paperButton.setIcon(new ImageIcon("default series\\default paper card.png"));
         paperButton.setContentAreaFilled(false);
         paperButton.setBorderPainted(false);
         paperButton.addActionListener(e -> proceed());
         paperButton.addActionListener(e -> player1.setChoice("paper"));
-        paperButton.addActionListener(e -> p1Hurt.setLocation(330, 200));
+        paperButton.addActionListener(e -> p1Hurt.setLocation(335, 200));
         thisPanel.add(paperButton);
 
         scissorButton = new JButton();
         scissorButton.setSize(240, 360);
-        scissorButton.setLocation(570, 200);
+        scissorButton.setLocation(580, 200);
         scissorButton.setIcon(new ImageIcon("default series\\default scissors card.png"));
         scissorButton.setContentAreaFilled(false);
         scissorButton.setBorderPainted(false);
         scissorButton.addActionListener(e -> proceed());
         scissorButton.addActionListener(e -> player1.setChoice("scissors"));
-        scissorButton.addActionListener(e -> p1Hurt.setLocation(570, 200));
+        scissorButton.addActionListener(e -> p1Hurt.setLocation(580, 200));
         thisPanel.add(scissorButton);
 
         // P2 HURT (YUNG RED)
@@ -498,6 +498,7 @@ public class game extends JPanel implements ActionListener {
         scissorButton.setVisible(false);
         unknownCard.setVisible(false);
         paused.setVisible(true);
+        pauseButton.setVisible(false);
         p1lives.setVisible(false);
         p2lives.setVisible(false);
         overlay.setVisible(true);
@@ -602,10 +603,6 @@ public class game extends JPanel implements ActionListener {
         p2Hurt.setVisible(false);
         gameOverPanel.setVisible(true);
         pauseButton.setVisible(false);
-        rockButton.setVisible(false);
-        paperButton.setVisible(false);
-        scissorButton.setVisible(false);
-        unknownCard.setVisible(false);
     }
 
     // LAGAY NALANG NATIN SA MGA METHODS YUNG MABABAWASAN YUNG LIFE
@@ -706,18 +703,65 @@ public class game extends JPanel implements ActionListener {
     public void proceed() {
         randomChoice = new Random();
 
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                rockButton.setIcon(new ImageIcon("default series\\default rock card.png"));
+                paperButton.setIcon(new ImageIcon("default series\\default paper card.png"));
+                scissorButton.setIcon(new ImageIcon("default series\\default scissors card.png"));
+                unknownCard.setIcon(new ImageIcon("default series\\backcard.png"));
+
+                rockButton.setEnabled(true);
+                scissorButton.setEnabled(true);
+                paperButton.setEnabled(true);
+            }
+        };
+
         // DISABLE THE BUTTONS TO AVOID SPAMMING
         rockButton.setEnabled(false);
         scissorButton.setEnabled(false);
         paperButton.setEnabled(false);
+
+        // SET A DISABLED ICON KASI PANGIT PAG GRAY LANG SIYA
         rockButton.setDisabledIcon(new ImageIcon("default series\\default rock card.png"));
         paperButton.setDisabledIcon(new ImageIcon("default series\\default paper card.png"));
         scissorButton.setDisabledIcon(new ImageIcon("default series\\default scissors card.png"));
 
+        randomChoice = new Random();
+        int randomElement = randomChoice.nextInt(3);
+        player1.setElement((elements[randomElement]));
+
+        // INFUSAL OF ELEMENTS FOR PLAYER
+        if (player1.getChoice().equals("rock")) {
+            if (player1.getElement().equals("fire")) {
+                rockButton.setDisabledIcon(new ImageIcon("Fire Series\\fire rock card.png"));
+            } else if (player1.getElement().equals("water")) {
+                rockButton.setDisabledIcon(new ImageIcon("Water Series\\water rock card.png"));
+            } else if (player1.getElement().equals("leaf")) {
+                rockButton.setDisabledIcon(new ImageIcon("Leaf Series\\leaf rock card.png"));
+            }
+
+        } else if (player1.getChoice().equals("paper")) {
+            if (randomElement == 0) {
+                paperButton.setDisabledIcon(new ImageIcon("Fire Series\\fire paper card.png"));
+            } else if (player1.getElement().equals("water")) {
+                paperButton.setDisabledIcon(new ImageIcon("Water Series\\water paper card.png"));
+            } else if (player1.getElement().equals("leaf")) {
+                paperButton.setDisabledIcon(new ImageIcon("Leaf Series\\leaf paper card.png"));
+            }
+        } else if (player1.getChoice().equals("scissors")) {
+            if (randomElement == 0) {
+                scissorButton.setDisabledIcon(new ImageIcon("Fire Series\\fire scissors card.png"));
+            } else if (player1.getElement().equals("water")) {
+                scissorButton.setDisabledIcon(new ImageIcon("Water Series\\water scissors card.png"));
+            } else if (player1.getElement().equals("leaf")) {
+                scissorButton.setDisabledIcon(new ImageIcon("Leaf Series\\leaf scissors card.png"));
+            }
+        }
+
         // RANDOMIZER FOR COMPUTER TO SELECT WHAT OBJECT
         int computerChoice = randomChoice.nextInt(3);
         computer.setChoice(objects[computerChoice]);
-        computerCard = computerChoice;
 
         Random randomChoiceofElement = new Random();
         int randomInfuse = randomChoiceofElement.nextInt(3);
@@ -757,53 +801,6 @@ public class game extends JPanel implements ActionListener {
                 computer.setElement("leaf");
             }
         }
-
-        randomChoice = new Random();
-        int randomElement = randomChoice.nextInt(3);
-        player1.setElement((elements[randomElement]));
-
-        // INFUSAL OF ELEMENTS FOR PLAYER
-        if (player1.getChoice().equals("rock")) {
-            if (player1.getElement().equals("fire")) {
-                rockButton.setDisabledIcon(new ImageIcon("Fire Series\\fire rock card.png"));
-            } else if (player1.getElement().equals("water")) {
-                rockButton.setDisabledIcon(new ImageIcon("Water Series\\water rock card.png"));
-            } else if (player1.getElement().equals("leaf")) {
-                rockButton.setDisabledIcon(new ImageIcon("Leaf Series\\leaf rock card.png"));
-            }
-
-        } else if (player1.getChoice().equals("paper")) {
-            if (randomElement == 0) {
-                paperButton.setDisabledIcon(new ImageIcon("Fire Series\\fire paper card.png"));
-            } else if (player1.getElement().equals("water")) {
-                paperButton.setDisabledIcon(new ImageIcon("Water Series\\water paper card.png"));
-            } else if (player1.getElement().equals("leaf")) {
-                paperButton.setDisabledIcon(new ImageIcon("Leaf Series\\leaf paper card.png"));
-            }
-        } else if (player1.getChoice().equals("scissors")) {
-            if (randomElement == 0) {
-                scissorButton.setDisabledIcon(new ImageIcon("Fire Series\\fire scissors card.png"));
-            } else if (player1.getElement().equals("water")) {
-                scissorButton.setDisabledIcon(new ImageIcon("Water Series\\water scissors card.png"));
-            } else if (player1.getElement().equals("leaf")) {
-                scissorButton.setDisabledIcon(new ImageIcon("Leaf Series\\leaf scissors card.png"));
-            }
-        }
-
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            public void run() {
-                rockButton.setIcon(new ImageIcon("default series\\default rock card.png"));
-                paperButton.setIcon(new ImageIcon("default series\\default paper card.png"));
-                scissorButton.setIcon(new ImageIcon("default series\\default scissors card.png"));
-                unknownCard.setIcon(new ImageIcon("default series\\backcard.png"));
-
-                rockButton.setEnabled(true);
-                scissorButton.setEnabled(true);
-                paperButton.setEnabled(true);
-            }
-        };
-        timer.schedule(task, 2500);
 
         // ON THE FOLLOWING BLOCK OF CODE, THE PROGRAM WILL DETERMINE WHO IS THE WINNER
         // PLAYER 1 ROCK AND FIRE
@@ -972,8 +969,9 @@ public class game extends JPanel implements ActionListener {
 
         if (player1.getLives() <= 0) {
             p2Won = true;
-            gameOver.setIcon(new ImageIcon(
-                    "game end (game over- you won- good game- well played)\\game end texts\\GAME OVER(TEXT).png"));
+            ImageIcon youLost = new ImageIcon(
+                    "game end (game over- you won- good game- well played)\\game end texts\\GAME OVER(TEXT).png");
+            gameOver.setIcon(youLost);
             p1lives.setText("Lives: 0");
             lastNum = recentIndex.get(recentIndex.size() - 1);
 
@@ -995,9 +993,9 @@ public class game extends JPanel implements ActionListener {
         } else if (computer.getLives() <= 0) {
             p1Won = true;
             p2lives.setText("Lives: 0");
-
-            gameOver.setIcon(new ImageIcon(
-                    "game end (game over- you won- good game- well played)\\game end texts\\YOU WON(TEXT).png"));
+            ImageIcon youWon = new ImageIcon(
+                    "game end (game over- you won- good game- well played)\\game end texts\\YOU WON(TEXT).png");
+            gameOver.setIcon(youWon);
             lastNum = recentIndex.get(recentIndex.size() - 1);
 
             switch (lastNum) {
@@ -1017,9 +1015,11 @@ public class game extends JPanel implements ActionListener {
             gameIsOver();
         } else if (player1.getLives() == 1 && computer.getLives() == 1) {
             round.setText("Final round");
+            timer.schedule(task, 2500);
         } else {
             roundNo += 1;
             round.setText("Round No: " + Integer.toString(roundNo));
+            timer.schedule(task, 2500);
         }
 
     }

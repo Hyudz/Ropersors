@@ -2,9 +2,7 @@ package files;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +24,11 @@ public class mainMenu extends JPanel implements ActionListener {
 
     mainMenu() {
 
+        // CONFIGURATION NG GUI
+        this.setLayout(null);
+        this.setVisible(true);
+        this.setSize(1550, 830);
+
         // CONTAINS THE CLICK ANYWHERE SCREEN
         clickPanel = new JPanel(new BorderLayout());
         clickPanel.setSize(1550, 830);
@@ -34,7 +37,7 @@ public class mainMenu extends JPanel implements ActionListener {
         JButton clickAnywhere = new JButton();
         ImageIcon titleIcon = new ImageIcon("titlescreen.png");
         Image tittleIcon = titleIcon.getImage();
-        Image titleIconResized = tittleIcon.getScaledInstance(1550, 830, Image.SCALE_SMOOTH);
+        Image titleIconResized = tittleIcon.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
         titleIcon = new ImageIcon(titleIconResized);
 
         clickAnywhere.setIcon(titleIcon);
@@ -77,12 +80,12 @@ public class mainMenu extends JPanel implements ActionListener {
 
         // ETO YUNG INSTRUCTION
         JLabel instructionsLabel = new JLabel(
-                new ImageIcon("main menu stuff\\pngs and text\\how to play screen (with close button).png"));
+                new ImageIcon("main menu stuff\\pngs and text\\how to play screen.png"));
         instructionsLabel.setSize(989, 556);
         instructionPanel.add(instructionsLabel);
         instructionPanel.setVisible(false);
         instructionPanel.setOpaque(false);
-        instructionPanel.setLocation(300, 100);
+        instructionPanel.setLocation(250, 145);
         lobbyPanel.add(instructionPanel);
 
         // ETO NAMAN PARA PAG MAG EXIT YUNG USER
@@ -121,19 +124,20 @@ public class mainMenu extends JPanel implements ActionListener {
         // SELECT MODE TEXT NA NASA TAAS
         JLabel selectMode = new JLabel(new ImageIcon("main menu stuff\\pngs and text\\select game mode (text).png"));
         selectMode.setSize(684, 104);
+        selectMode.setLocation(10, 10);
         lobbyPanel.add(selectMode);
 
         PVE = new JButton(new ImageIcon("main menu stuff\\buttons\\pvai card.png"));
-        PVE.setSize(240, 360);
-        PVE.setLocation(900, 200);
+        PVE.setSize(400, 600);
+        PVE.setLocation(800, 125);
         PVE.setContentAreaFilled(false);
         PVE.setBorderPainted(false);
         PVE.addActionListener(this);
         lobbyPanel.add(PVE);
 
         PVP = new JButton(new ImageIcon("main menu stuff\\buttons\\pvp card.png"));
-        PVP.setSize(240, 360);
-        PVP.setLocation(400, 200);
+        PVP.setSize(400, 600);
+        PVP.setLocation(300, 125);
         PVP.setContentAreaFilled(false);
         PVP.setBorderPainted(false);
         PVP.addActionListener(this);
@@ -155,30 +159,24 @@ public class mainMenu extends JPanel implements ActionListener {
         exit.setBorderPainted(false);
         lobbyPanel.add(exit);
 
-        ImageIcon background = new ImageIcon("main menu stuff\\main menu bg.png");
+        ImageIcon background = new ImageIcon("main menu stuff\\new main menu bg.png");
         Image backkground = background.getImage();
-        Image bgResized = backkground.getScaledInstance(1535, 792, java.awt.Image.SCALE_SMOOTH);
+        Image bgResized = backkground.getScaledInstance(this.getWidth(), this.getHeight(), java.awt.Image.SCALE_SMOOTH);
         background = new ImageIcon(bgResized);
 
         // ISET NATIN YUNG SA BACKGROUND NAMAN
         JLabel backgroundd = new JLabel();
         backgroundd.setIcon(background);
-        backgroundd.setLocation(0, -143);
-        backgroundd.setSize(1920, 1080);
+        backgroundd.setLocation(0, 0);
+        backgroundd.setSize(this.getWidth(), this.getHeight());
 
         JPanel bg = new JPanel();
-        bg.setSize(1920, 1080);
+        bg.setSize(this.getWidth(), this.getHeight());
         bg.setLocation(0, 0);
         bg.add(backgroundd);
         bg.setLayout(null);
         lobbyPanel.add(bg);
         this.add(lobbyPanel);
-
-        // CONFIGURATION NG GUI
-        this.setLayout(null);
-        this.setVisible(true);
-        this.setSize(1550, 830);
-        // this.setUndecorated(true);
 
     }
 

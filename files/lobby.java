@@ -16,7 +16,7 @@ public class lobby extends JFrame {
         this.setVisible(true);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setSize(1550, 830);
-        this.setResizable(false);
+        // this.setResizable(false);
         ImageIcon icon = new ImageIcon("boosh withdoro1.png");
         this.setIconImage(icon.getImage());
     }

@@ -826,6 +826,23 @@ public class gamev2 extends JPanel implements ActionListener {
         randomChoice = new Random();
         Random randomChoiceofElement = new Random();
         int randomInfuse = randomChoiceofElement.nextInt(3);
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                p1Card.setIcon(new ImageIcon("default series\\backcard.png"));
+                p2Card.setIcon(new ImageIcon("default series\\backcard.png"));
+
+                enableButtons();
+
+                p1Status.setVisible(true);
+                p2Status.setVisible(true);
+
+                p1Status.setIcon(new ImageIcon("buttons and prompts\\player 1 input butts.png"));
+                p2Status.setIcon(new ImageIcon("buttons and prompts\\player 2 input butts.png"));
+
+            }
+        };
         // INFUSAL OF ELEMENT FOR computer
 
         if (player2.getChoice().equals("rock")) {
@@ -1108,28 +1125,14 @@ public class gamev2 extends JPanel implements ActionListener {
             gameIsOver();
         } else if (player1.getLives() == 1 && player2.getLives() == 1) {
             round.setText("Final round");
+
+            timer.schedule(task, 2500);
+
         } else {
             p1Choosed = false;
             p2Choosed = false;
             roundNo += 1;
             round.setText("Round No: " + Integer.toString(roundNo));
-
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                public void run() {
-                    p1Card.setIcon(new ImageIcon("default series\\backcard.png"));
-                    p2Card.setIcon(new ImageIcon("default series\\backcard.png"));
-
-                    enableButtons();
-
-                    p1Status.setVisible(true);
-                    p2Status.setVisible(true);
-
-                    p1Status.setIcon(new ImageIcon("buttons and prompts\\player 1 input butts.png"));
-                    p2Status.setIcon(new ImageIcon("buttons and prompts\\player 2 input butts.png"));
-
-                }
-            };
             timer.schedule(task, 2500);
         }
 
