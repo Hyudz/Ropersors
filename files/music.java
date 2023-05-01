@@ -7,15 +7,14 @@ import javax.sound.sampled.Clip;
 
 public class music {
 
-    public boolean playSound = false;
-
     Clip clip, panalo, natalo, absoluteDmg, gameMode1, gameMode2, gameMode3, gameMode4;
-    AudioInputStream sound, sound1, sound2, sound3, sound4;
+    AudioInputStream sound, sound1, sound2, sound3, sound4, win, loose, absolutDmg;
 
     File lobby = new File("Sound FX\\BG music\\lobby.wav");
     File victory = new File("Sound FX\\other sound fx\\win4.wav");
     File defeat = new File("Sound FX\\other sound fx\\dead-8bit-41400.wav");
     File crit = new File("Sound FX\\other sound fx\\playerhit-43108.wav");
+
     File bg1 = new File("Sound FX\\BG music\\magma.wav");
     File bg2 = new File("Sound FX\\BG music\\sky.wav");
     File bg3 = new File("Sound FX\\BG music\\sand.wav");
@@ -138,9 +137,9 @@ public class music {
     // GAME ENDS AND YOU WON ON PVP/PVE
     public void winner() {
         try {
-            AudioInputStream sound = AudioSystem.getAudioInputStream(victory);
+            win = AudioSystem.getAudioInputStream(victory);
             panalo = AudioSystem.getClip();
-            panalo.open(sound);
+            panalo.open(win);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -153,9 +152,9 @@ public class music {
     // GAME ENDS AND YOU LOST ON PVE
     public void looser() {
         try {
-            AudioInputStream sound = AudioSystem.getAudioInputStream(defeat);
+            loose = AudioSystem.getAudioInputStream(defeat);
             natalo = AudioSystem.getClip();
-            natalo.open(sound);
+            natalo.open(loose);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,9 +191,9 @@ public class music {
     // GAME ENDS AND YOU WON ON PVP/PVE==========================
     public void winner2() {
         try {
-            AudioInputStream sound = AudioSystem.getAudioInputStream(victory);
+            win = AudioSystem.getAudioInputStream(victory);
             panalo = AudioSystem.getClip();
-            panalo.open(sound);
+            panalo.open(win);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -207,9 +206,9 @@ public class music {
     // GAME ENDS AND YOU LOST ON PVE
     public void looser2() {
         try {
-            AudioInputStream sound = AudioSystem.getAudioInputStream(defeat);
+            loose = AudioSystem.getAudioInputStream(defeat);
             natalo = AudioSystem.getClip();
-            natalo.open(sound);
+            natalo.open(loose);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -246,9 +245,9 @@ public class music {
     // GAME ENDS AND YOU WON ON PVP/PVE
     public void winner3() {
         try {
-            AudioInputStream sound = AudioSystem.getAudioInputStream(victory);
+            win = AudioSystem.getAudioInputStream(victory);
             panalo = AudioSystem.getClip();
-            panalo.open(sound);
+            panalo.open(win);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -261,9 +260,9 @@ public class music {
     // GAME ENDS AND YOU LOST ON PVE
     public void looser3() {
         try {
-            AudioInputStream sound = AudioSystem.getAudioInputStream(defeat);
+            loose = AudioSystem.getAudioInputStream(defeat);
             natalo = AudioSystem.getClip();
-            natalo.open(sound);
+            natalo.open(loose);
         } catch (Exception e) {
             e.printStackTrace();
         }

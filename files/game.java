@@ -37,6 +37,7 @@ public class game extends JPanel implements ActionListener {
 
     ArrayList<Integer> recentIndex = new ArrayList<Integer>();
 
+    // Contructor
     game() {
         thisPanel = new JPanel();
         thisPanel.setLocation(0, 0);
@@ -477,8 +478,6 @@ public class game extends JPanel implements ActionListener {
         unknownCard.setVisible(true);
         unknownCard.setIcon(new ImageIcon("default series\\backcard.png"));
         pauseButton.setVisible(true);
-        p1lives.setForeground(Color.white);
-        p2lives.setForeground(Color.white);
         player1.setLives(10);
         computer.setLives(10);
         rockButton.setVisible(true);
