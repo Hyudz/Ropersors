@@ -10,8 +10,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -484,6 +487,14 @@ public class gamev2 extends JPanel implements ActionListener {
         this.setLayout(null);
         this.setVisible(true);
         this.setSize(1550, 830);
+
+        Point point = new Point(0,0);
+
+        Toolkit tkit=Toolkit.getDefaultToolkit();
+        Image img1 = tkit.getImage("mouse cursor.png");
+
+        Cursor cursor1 = tkit.createCustomCursor(img1, point,"");
+        thisPanel.setCursor(cursor1);
     }
 
     // PLAY THE SOUND IF THE FRAME IS VISIBLE

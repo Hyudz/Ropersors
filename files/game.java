@@ -7,8 +7,11 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -344,6 +347,14 @@ public class game extends JPanel implements ActionListener {
         bg.add(background);
         bg.setLayout(null);
         thisPanel.add(bg);
+
+        Point point = new Point(0,0);
+
+        Toolkit tkit=Toolkit.getDefaultToolkit();
+        Image img1 = tkit.getImage("mouse cursor.png");
+
+        Cursor cursor1 = tkit.createCustomCursor(img1, point,"");
+        thisPanel.setCursor(cursor1);
 
         // CONFIGURATION NG GUI
         this.setLayout(null);

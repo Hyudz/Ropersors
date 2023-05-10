@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "MouseListenerExample",
+            "request": "launch",
+            "mainClass": "files.MouseListenerExample",
+            "projectName": "Final project - 1920x1080_76fcb2b8"
+        },
+        {
             "name": "Java",
             "type": "java",
             "request": "launch",
