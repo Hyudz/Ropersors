@@ -17,6 +17,7 @@ import java.util.TimerTask;
 
 public class gamev2 extends JPanel implements ActionListener {
 
+    //Instance variables para ma-access siya sa iba't ibang methods.
     JLabel p1lives, p2lives, status, name1, name2, p1Card, p2Card, paused, overlay, background,
             gameOver, nameplate, nameplate2, nameplate3, round, p1Status, p2Status, confirm, damage, p1Hurt, p2Hurt;
     JPanel bg, names1, names2, thisPanel, exitPanel, dmgIndicator, gPaused, statuses, gameOverPanel;
