@@ -1,3 +1,4 @@
 {
-    "java.debug.settings.onBuildFailureProceed": false
+    "java.debug.settings.onBuildFailureProceed": false,
+    "git.ignoreLimitWarning": true
 }
