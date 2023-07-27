@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".versus_ai">
+
+    <ImageView
+        android:id="@+id/board_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/board_background_description"
+        android:src="@drawable/snad"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/player_nameplate"
+        android:layout_width="212dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/snad_nameplate"
+        android:contentDescription="@string/nameplate1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.207"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/board_background" />
+
+
+    <ImageView
+        android:id="@+id/computer_nameplate"
+        android:layout_width="212dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/snad_nameplate"
+        android:contentDescription="@string/nameplate1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.593"
+        app:layout_constraintStart_toEndOf="@+id/player_nameplate"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="VisualLintBounds" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-275dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_nameplate"
+        tools:ignore="VisualLintBounds">
+
+        <ImageButton
+            android:id="@+id/default_rock_card"
+            android:layout_width="116dp"
+            android:layout_height="191dp"
+            android:background="@null"
+            android:importantForAccessibility="no"
+            android:scaleType="centerInside"
+            android:src="@drawable/default_rock_card"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_nameplate"
+            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
+            tools:layout_editor_absoluteX="122dp" />
+
+        <ImageButton
+            android:id="@+id/default_paper_card"
+            android:layout_width="116dp"
+            android:layout_height="191dp"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/default_paper_card"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/default_rock_card"
+            app:layout_constraintTop_toBottomOf="@+id/player_nameplate"
+            tools:ignore="SpeakableTextPresentCheck"
+            app:layout_constraintVertical_bias="0.505"
+            android:importantForAccessibility="no" />
+
+        <ImageButton
+            android:id="@+id/default_scissor_card"
+            android:layout_width="116dp"
+            android:layout_height="191dp"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/default_scissors_card"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/default_paper_card"
+            app:layout_constraintTop_toBottomOf="@+id/player_nameplate"
+            tools:ignore="SpeakableTextPresentCheck,VisualLintBounds"
+            android:importantForAccessibility="no" />
+    </LinearLayout>
+
+
+    <ImageButton
+        android:id="@+id/default_enemy_card"
+        android:layout_width="116dp"
+        android:layout_height="191dp"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:src="@drawable/backcard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.341"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/computer_nameplate"
+        app:layout_constraintVertical_bias="0.504"
+        tools:ignore="SpeakableTextPresentCheck"
+        android:importantForAccessibility="no" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Ropersors</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="splash_description">splashscreen_app</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_mainmenu">mainmenu</string>
+    <string name="board_background_description">board background</string>
+    <string name="mode1">player versus computer mode</string>
+    <string name="mode2">player versus player mode</string>
+    <string name="p1_status">Player </string>
+    <string name="p2_status">Computer</string>
+    <string name="nameplate1">nameplate1</string>
+
+</resources>
