@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.Toast
 import com.ropersors.rps.databinding.FragmentVersusAiBinding
 import kotlin.random.Random
@@ -17,7 +16,6 @@ class versus_ai : Fragment(R.layout.fragment_versus_ai) {
 
     var player1 = players()
     var player2 = players()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,31 +42,68 @@ class versus_ai : Fragment(R.layout.fragment_versus_ai) {
     }
 
     fun continue_game() {
-        val randomElement: Int = Random.nextInt(0,3)
-        when (randomElement) {
-            0 -> Toast.makeText(activity?.applicationContext,"Fire",Toast.LENGTH_LONG).show()
-            1 -> Toast.makeText(activity?.applicationContext,"Water",Toast.LENGTH_LONG).show()
-            2 -> Toast.makeText(activity?.applicationContext,"Leaf",Toast.LENGTH_LONG).show()
+        val computerChoice: Int = Random.nextInt(0,3)
+
+        when (computerChoice) {
+            0 -> player2.choice = "rock"
+            1 -> player2.choice = "paper"
+            2 -> player2.choice = "scissors"
         }
 
-        fun p1Life1() {
-            var p1Lives: Int = player1.lives - 1
-            player1.lives = p1Lives
+        val coumputerCard = binding.defaultEnemyCard
+
+        if (computerChoice == 0) {
+            binding.defaultEnemyCard.animate().apply {
+                duration = 500
+                rotationY(90f)
+            }.withEndAction {
+                coumputerCard.setImageResource(R.drawable.default_rock_card)
+                binding.defaultEnemyCard.animate().apply {
+                    duration = 500
+                    rotationY(0f)
+                }
+            }.start()
+        } else if (computerChoice == 1) {
+            binding.defaultEnemyCard.animate().apply {
+                duration = 500
+                rotationY(90f)
+            }.withEndAction {
+                coumputerCard.setImageResource(R.drawable.default_paper_card)
+                binding.defaultEnemyCard.animate().apply {
+                    duration = 500
+                    rotationY(0f)
+                }
+            }.start()
+        } else if (computerChoice == 2) {
+            binding.defaultEnemyCard.animate().apply {
+                duration = 500
+                rotationY(90f)
+            }.withEndAction {
+                coumputerCard.setImageResource(R.drawable.default_scissors_card)
+                binding.defaultEnemyCard.animate().apply {
+                    duration = 500
+                    rotationY(0f)
+                }
+            }.start()
         }
 
-        fun p1Life2() {
-            var p1Lives: Int = player1.lives - 2
-            player1.lives = p1Lives
-        }
+        checkWinner()
 
-        fun p2Life1() {
-            var p2Lives: Int = player2.lives - 1
-            player2.lives = p2Lives
-        }
+    }
 
-        fun p2Life2() {
-            var p2Lives: Int = player2.lives - 2
-            player2.lives = p2Lives
+    fun checkWinner() {
+        if ((player1.choice == "rock" && player2.choice == "paper") ||
+            (player1.choice == "paper" && player2.choice =="scissors") ||
+            (player1.choice == "scissors" && player2.choice == "rock")) {
+            Toast.makeText(activity?.applicationContext,"You lost",Toast.LENGTH_SHORT).show()
+        } else if ((player2.choice == "rock" && player1.choice == "paper") ||
+            (player2.choice == "paper" && player1.choice =="scissors") ||
+            (player2.choice == "scissors" && player1.choice == "rock")){
+            Toast.makeText(activity?.applicationContext,"You won",Toast.LENGTH_SHORT).show()
+        } else if ((player1.choice == "rock" && player2.choice == "rock") ||
+            (player1.choice == "paper" && player2.choice == "paper") ||
+            (player1.choice == "scissors" && player2.choice == "scissors")) {
+            Toast.makeText(activity?.applicationContext,"Draw",Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Ropersors" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
+        <item name="android:windowIsTranslucent">true</item>
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
@@ -15,7 +16,7 @@
     <style name="Theme.Ropersors.Fullscreen" parent="Theme.Ropersors">
         <item name="android:actionBarStyle">@style/Widget.Theme.Ropersors.ActionBar.Fullscreen
         </item>
-        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@null</item>
     </style>
 </resources>
