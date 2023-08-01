@@ -12,5 +12,7 @@
     <string name="p1_status">Player </string>
     <string name="p2_status">Computer</string>
     <string name="nameplate1">nameplate1</string>
+    <string name="mainmenu_bg_description">This is the backgroud for this fragement</string>
+    <string name="instruction_text">instruction</string>
 
 </resources>
