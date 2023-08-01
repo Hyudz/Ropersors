@@ -7,9 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.ropersors.rps.databinding.FragmentVersusAiBinding
-import kotlin.random.Random
-
-
 
 class versus_ai : Fragment(R.layout.fragment_versus_ai) {
     private lateinit var binding: FragmentVersusAiBinding
@@ -23,36 +20,27 @@ class versus_ai : Fragment(R.layout.fragment_versus_ai) {
 
         binding = FragmentVersusAiBinding.inflate(inflater, container, false)
         binding.defaultRockCard.setOnClickListener {
-            player1.choice = "rock"
-            continue_game()
+            continue_game("rock")
 //            Toast.makeText(activity?.applicationContext, player1.choice, Toast.LENGTH_SHORT).show()
         }
         binding.defaultPaperCard.setOnClickListener {
-            player1.choice = "paper"
-            continue_game()
+            continue_game("paper")
 //            Toast.makeText(activity?.applicationContext, player1.choice, Toast.LENGTH_SHORT).show()
         }
         binding.defaultScissorCard.setOnClickListener {
-            player1.choice = "scissors"
-            continue_game()
+            continue_game("scissors")
 //            Toast.makeText(activity?.applicationContext, player1.choice, Toast.LENGTH_SHORT).show()
         }
 
         return binding.root
     }
 
-    fun continue_game() {
-        val computerChoice: Int = Random.nextInt(0,3)
-
-        when (computerChoice) {
-            0 -> player2.choice = "rock"
-            1 -> player2.choice = "paper"
-            2 -> player2.choice = "scissors"
-        }
-
+    fun continue_game(player_choice: String) {
+        player1.choice = player_choice
+        val choices = arrayListOf<String>("rock","paper","scissors").random()
         val coumputerCard = binding.defaultEnemyCard
 
-        if (computerChoice == 0) {
+        if (choices == "rock") {
             binding.defaultEnemyCard.animate().apply {
                 duration = 500
                 rotationY(90f)
@@ -63,7 +51,7 @@ class versus_ai : Fragment(R.layout.fragment_versus_ai) {
                     rotationY(0f)
                 }
             }.start()
-        } else if (computerChoice == 1) {
+        } else if (choices == "paper") {
             binding.defaultEnemyCard.animate().apply {
                 duration = 500
                 rotationY(90f)
@@ -74,7 +62,7 @@ class versus_ai : Fragment(R.layout.fragment_versus_ai) {
                     rotationY(0f)
                 }
             }.start()
-        } else if (computerChoice == 2) {
+        } else if (choices == "scissors") {
             binding.defaultEnemyCard.animate().apply {
                 duration = 500
                 rotationY(90f)
@@ -87,11 +75,12 @@ class versus_ai : Fragment(R.layout.fragment_versus_ai) {
             }.start()
         }
 
-        checkWinner()
+        checkWinner(choices)
 
     }
 
-    fun checkWinner() {
+    fun checkWinner(computerChoice: String) {
+        player2.choice = computerChoice
         if ((player1.choice == "rock" && player2.choice == "paper") ||
             (player1.choice == "paper" && player2.choice =="scissors") ||
             (player1.choice == "scissors" && player2.choice == "rock")) {
