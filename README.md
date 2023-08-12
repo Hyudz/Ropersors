@@ -3,7 +3,7 @@
 </div>
 
 <h1> Project Introduction </h1>
-<p align="juatify">The rock, paper, scissors is a game traditionally played using hand gestures depicting the objects mentioned.
+<p align="justify">The rock, paper, scissors is a game traditionally played using hand gestures depicting the objects mentioned.
 The  game is usually played by two persons and each player will choose an object. Based on their chosen object,
 there is a 1/3 chance of winning, losing, or a draw  for every round. </p>
 
