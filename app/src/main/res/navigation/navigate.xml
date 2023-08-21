@@ -36,5 +36,21 @@
         android:id="@+id/versus_ai"
         android:name="com.ropersors.rps.versus_ai"
         android:label="fragment_versus_ai"
-        tools:layout="@layout/fragment_versus_ai" />
+        tools:layout="@layout/fragment_versus_ai" >
+        <action
+            android:id="@+id/action_versus_ai_to_pauseScreenFragment"
+            app:destination="@id/pauseScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pauseScreenFragment"
+        android:name="com.ropersors.rps.PauseScreenFragment"
+        android:label="fragment_pause_screen"
+        tools:layout="@layout/fragment_pause_screen" >
+        <action
+            android:id="@+id/action_pauseScreenFragment_to_splashscreen"
+            app:destination="@id/splashscreen" />
+        <action
+            android:id="@+id/action_pauseScreenFragment_to_versus_ai"
+            app:destination="@id/versus_ai" />
+    </fragment>
 </navigation>

@@ -1,8 +1,8 @@
 package com.ropersors.rps
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.ropersors.rps.databinding.ActivityMainBinding
@@ -14,6 +14,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val music: MediaPlayer = MediaPlayer.create(this@MainActivity, R.raw.lobby)
+        music.start()
 
         this.window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

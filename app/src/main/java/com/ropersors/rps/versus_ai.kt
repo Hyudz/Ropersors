@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.ropersors.rps.databinding.FragmentVersusAiBinding
 
 class versus_ai : Fragment(R.layout.fragment_versus_ai) {
@@ -17,6 +18,7 @@ class versus_ai : Fragment(R.layout.fragment_versus_ai) {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
 
         binding = FragmentVersusAiBinding.inflate(inflater, container, false)
         binding.defaultRockCard.setOnClickListener {
@@ -32,6 +34,10 @@ class versus_ai : Fragment(R.layout.fragment_versus_ai) {
 //            Toast.makeText(activity?.applicationContext, player1.choice, Toast.LENGTH_SHORT).show()
         }
 
+        binding.pauseButton?.setOnClickListener {
+            findNavController().navigate(versus_aiDirections.actionVersusAiToPauseScreenFragment())
+        }
+
         return binding.root
     }
 
@@ -43,35 +49,35 @@ class versus_ai : Fragment(R.layout.fragment_versus_ai) {
         if (choices == "rock") {
             binding.defaultEnemyCard.animate().apply {
                 duration = 500
-                rotationY(90f)
+                rotationY(180f)
             }.withEndAction {
-                coumputerCard.setImageResource(R.drawable.default_rock_card)
                 binding.defaultEnemyCard.animate().apply {
                     duration = 500
                     rotationY(0f)
                 }
+                coumputerCard.setImageResource(R.drawable.default_rock_card)
             }.start()
         } else if (choices == "paper") {
             binding.defaultEnemyCard.animate().apply {
                 duration = 500
-                rotationY(90f)
+                rotationY(180f)
             }.withEndAction {
-                coumputerCard.setImageResource(R.drawable.default_paper_card)
                 binding.defaultEnemyCard.animate().apply {
                     duration = 500
                     rotationY(0f)
                 }
+                coumputerCard.setImageResource(R.drawable.default_paper_card)
             }.start()
         } else if (choices == "scissors") {
             binding.defaultEnemyCard.animate().apply {
                 duration = 500
-                rotationY(90f)
+                rotationY(180f)
             }.withEndAction {
-                coumputerCard.setImageResource(R.drawable.default_scissors_card)
                 binding.defaultEnemyCard.animate().apply {
                     duration = 500
                     rotationY(0f)
                 }
+                coumputerCard.setImageResource(R.drawable.default_scissors_card)
             }.start()
         }
 
